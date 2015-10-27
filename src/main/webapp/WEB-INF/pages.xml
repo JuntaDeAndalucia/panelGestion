@@ -1,0 +1,376 @@
+<?xml version="1.0"?>
+<!-- Empresa desarrolladora: Guadaltel Autor: Junta de Andalucía Derechos 
+  de explotación propiedad de la Junta de Andalucía. Éste programa es software 
+  libre: usted tiene derecho a redistribuirlo y/o modificarlo bajo los términos 
+  de la Licencia EUPL European Public License publicada por el organismo IDABC 
+  de la Comisión Europea, en su versión 1.0. o posteriores. Éste programa se 
+  distribuye de buena fe, pero SIN NINGUNA GARANTÍA, incluso sin las presuntas 
+  garantías implícitas de USABILIDAD o ADECUACIÓN A PROPÓSITO CONCRETO. Para 
+  mas información consulte la Licencia EUPL European Public License. Usted 
+  recibe una copia de la Licencia EUPL European Public License junto con este 
+  programa, si por algún motivo no le es posible visualizarla, puede consultarla 
+  en la siguiente URL: http://ec.europa.eu/idabc/servlets/Doc?id=31099 You 
+  should have received a copy of the EUPL European Public License along with 
+  this program. If not, see http://ec.europa.eu/idabc/servlets/Doc?id=31096 
+  Vous devez avoir reçu une copie de la EUPL European Public License avec ce 
+  programme. Si non, voir http://ec.europa.eu/idabc/servlets/Doc?id=31205 Sie 
+  sollten eine Kopie der EUPL European Public License zusammen mit diesem Programm. 
+  Wenn nicht, finden Sie da http://ec.europa.eu/idabc/servlets/Doc?id=29919 -->
+<pages login-view-id="/pages/login.xhtml" no-conversation-view-id="/pages/index.xhtml"
+  xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
+  
+  <!-- Navegación -->
+  <page view-id="/pages/index.xhtml" login-required="true">
+    <description>Inicio</description>
+    <begin-conversation join="true"/>
+    <navigation>
+      <rule if-outcome="goNewIg">
+        <redirect view-id="/pages/newig.xhtml" />
+      </rule>
+      <rule if-outcome="goViewIg">
+         <redirect view-id="/pages/management/ig.xhtml">
+          <param name="fromExternal" value="#{true}" />
+         </redirect>
+      </rule>
+      <rule if-outcome="goConfiguration">
+        <redirect view-id="/pages/configuration/configuration.xhtml" />
+      </rule>
+    </navigation>
+  </page>
+  
+  <page view-id="/pages/newig.xhtml" login-required="true">
+  <description>Nueva información geográfica</description>
+  <begin-conversation join="true" />
+  <navigation>
+    <rule if-outcome="goViewTask">
+      <redirect view-id="/pages/newig/tasksQueue.xhtml">
+        <param name="taskTicket" value="#{newgicontroller.runningTaskTableTicket}" />
+      </redirect>
+    </rule>
+    <rule if-outcome="goTasksQueue">
+      <end-conversation />
+      <redirect view-id="/pages/newig/tasksQueue.xhtml" />
+    </rule>
+    <rule if-outcome="goViewIg">
+      <redirect view-id="/pages/management/ig.xhtml">
+          <param name="fromExternal" value="#{true}" />
+      </redirect>
+    </rule>
+    <rule if-outcome="goOgc">
+      <redirect view-id="/pages/management/ogc.xhtml" />
+    </rule>
+    <rule if-outcome="goRa">
+      <redirect view-id="/pages/management/ra.xhtml" />
+    </rule>
+    <rule if-outcome="goGeobusquedas">
+      <redirect view-id="/pages/management/geobusquedas.xhtml" />
+    </rule>
+    <rule if-outcome="goMapea">
+      <redirect view-id="/pages/management/mapea.xhtml" />
+    </rule>
+    <rule if-outcome="goDescargas">
+      <redirect view-id="/pages/management/descargas.xhtml" />
+    </rule>
+    <rule if-outcome="goConfiguration">
+      <redirect view-id="/pages/configuration/configuration.xhtml" />
+    </rule>
+  </navigation>
+</page>
+  
+  <page view-id="/pages/newig/tasksQueue.xhtml" action="#{tasksQueueController.loadTasks()}" login-required="true">
+     <description>Tareas</description>
+     <begin-conversation join="true"/>
+     <navigation>
+         <rule if-outcome="goNewIg">
+            <redirect view-id="/pages/newig.xhtml" />
+         </rule>
+         <rule if-outcome="goOgc">
+            <end-conversation />
+            <redirect view-id="/pages/management/ogc.xhtml" />
+         </rule>
+         <rule if-outcome="goRa">
+            <end-conversation />
+            <redirect view-id="/pages/management/ra.xhtml" />
+         </rule>
+         <rule if-outcome="goViewIg">
+            <end-conversation />
+            <redirect view-id="/pages/management/ig.xhtml">
+              <param name="fromExternal" value="#{true}" />
+            </redirect>
+          </rule>
+          <rule if-outcome="goGeobusquedas">
+            <end-conversation />
+            <redirect view-id="/pages/management/geobusquedas.xhtml" />
+          </rule>
+          <rule if-outcome="goMapea">
+            <end-conversation />
+            <redirect view-id="/pages/management/mapea.xhtml" />
+          </rule>
+          <rule if-outcome="goDescargas">
+            <end-conversation />
+            <redirect view-id="/pages/management/descargas.xhtml" />
+          </rule>
+          <rule if-outcome="goConfiguration">
+            <end-conversation />
+            <redirect view-id="/pages/configuration/configuration.xhtml" />
+          </rule>
+     </navigation>
+  </page>
+  
+  <page view-id="/pages/management/ig.xhtml" action="#{gicontroller.onSelectTable()}" login-required="true">
+    <description>Información Geográfica</description>
+    <begin-conversation join="true" />
+    <navigation>
+      <rule if-outcome="goViewTask">
+        <redirect view-id="/pages/newig/tasksQueue.xhtml">
+          <param name="taskTicket" value="#{gicontroller.associatedTaskTicket}" />
+        </redirect>
+      </rule>
+      <rule if-outcome="goTasksQueue">
+         <end-conversation />
+         <redirect view-id="/pages/newig/tasksQueue.xhtml" />
+      </rule>
+      <rule if-outcome="goNewIg">
+        <redirect view-id="/pages/newig.xhtml" />
+      </rule>
+      <rule if-outcome="goOgc">
+        <redirect view-id="/pages/management/ogc.xhtml" />
+      </rule>
+      <rule if-outcome="goRa">
+        <redirect view-id="/pages/management/ra.xhtml" />
+      </rule>
+      <rule if-outcome="goGeobusquedas">
+        <redirect view-id="/pages/management/geobusquedas.xhtml" />
+      </rule>
+      <rule if-outcome="goMapea">
+        <redirect view-id="/pages/management/mapea.xhtml" />
+      </rule>
+      <rule if-outcome="goDescargas">
+        <redirect view-id="/pages/management/descargas.xhtml" />
+      </rule>
+      <rule if-outcome="goConfiguration">
+        <redirect view-id="/pages/configuration/configuration.xhtml" />
+      </rule>
+    </navigation>
+  </page>
+  <page view-id="/pages/management/ogc.xhtml" login-required="true">
+    <description>Servicios OGC</description>
+    <action execute="#{ogccontroller.selectTable(wscontroller.table)}" if="#{empty param['javax.faces.ViewState']}"/>
+    <navigation>
+      <rule if-outcome="goNewIg">
+        <redirect view-id="/pages/newig.xhtml" />
+      </rule>
+      <rule if-outcome="goRa">
+        <redirect view-id="/pages/management/ra.xhtml" />
+     </rule>
+     <rule if-outcome="goViewIg">
+         <redirect view-id="/pages/management/ig.xhtml">
+            <param name="fromExternal" value="#{true}" />
+        </redirect>
+      </rule>
+      <rule if-outcome="goGeobusquedas">
+        <redirect view-id="/pages/management/geobusquedas.xhtml" />
+      </rule>
+      <rule if-outcome="goMapea">
+        <redirect view-id="/pages/management/mapea.xhtml" />
+      </rule>
+      <rule if-outcome="goDescargas">
+        <redirect view-id="/pages/management/descargas.xhtml" />
+      </rule>
+      <rule if-outcome="goConfiguration">
+        <redirect view-id="/pages/configuration/configuration.xhtml" />
+      </rule>
+    </navigation>
+  </page>
+  <page view-id="/pages/management/ra.xhtml" login-required="true">
+    <description>Servicios de realidad aumentada</description>
+    <action execute="#{racontroller.selectTable(wscontroller.table)}" if="#{empty param['javax.faces.ViewState']}"/>
+    <navigation>
+      <rule if-outcome="goNewIg">
+        <redirect view-id="/pages/newig.xhtml" />
+      </rule>
+      <rule if-outcome="goOgc">
+        <redirect view-id="/pages/management/ogc.xhtml" />
+      </rule>
+      <rule if-outcome="goViewIg">
+         <redirect view-id="/pages/management/ig.xhtml">
+            <param name="fromExternal" value="#{true}" />
+        </redirect>
+      </rule>
+      <rule if-outcome="goGeobusquedas">
+        <redirect view-id="/pages/management/geobusquedas.xhtml" />
+      </rule>
+      <rule if-outcome="goMapea">
+        <redirect view-id="/pages/management/mapea.xhtml" />
+      </rule>
+      <rule if-outcome="goDescargas">
+        <redirect view-id="/pages/management/descargas.xhtml" />
+      </rule>
+      <rule if-outcome="goConfiguration">
+        <redirect view-id="/pages/configuration/configuration.xhtml" />
+      </rule>
+    </navigation>
+  </page>
+  <page view-id="/pages/management/geobusquedas.xhtml" login-required="true">
+    <description>Servicios de geobúsquedas</description>
+    <action execute="#{racontroller.selectTable(wscontroller.table)}" if="#{empty param['javax.faces.ViewState']}"/>
+    <navigation>
+      <rule if-outcome="goNewIg">
+        <redirect view-id="/pages/newig.xhtml" />
+      </rule>
+      <rule if-outcome="goViewIg">
+         <redirect view-id="/pages/management/ig.xhtml">
+              <param name="fromExternal" value="#{true}" />
+          </redirect>
+      </rule>
+      <rule if-outcome="goOgc">
+        <redirect view-id="/pages/management/ogc.xhtml" />
+      </rule>
+      <rule if-outcome="goRa">
+        <redirect view-id="/pages/management/ra.xhtml" />
+      </rule>
+      <rule if-outcome="goGeobusquedas">
+        <redirect view-id="/pages/management/geobusquedas.xhtml" />
+      </rule>
+      <rule if-outcome="goMapea">
+        <redirect view-id="/pages/management/mapea.xhtml" />
+      </rule>
+      <rule if-outcome="goDescargas">
+        <redirect view-id="/pages/management/descargas.xhtml" />
+      </rule>
+      <rule if-outcome="goConfiguration">
+        <redirect view-id="/pages/configuration/configuration.xhtml" />
+      </rule>
+    </navigation>
+  </page>
+  <page view-id="/pages/management/mapea.xhtml" login-required="true">
+    <description>Mapea</description>
+    <begin-conversation join="true"/>
+    <navigation>
+      <rule if-outcome="goNewIg">
+        <redirect view-id="/pages/newig.xhtml" />
+      </rule>
+      <rule if-outcome="goViewIg">
+         <redirect view-id="/pages/management/ig.xhtml">
+            <param name="fromExternal" value="#{true}" />
+        </redirect>
+      </rule>
+      <rule if-outcome="goOgc">
+        <redirect view-id="/pages/management/ogc.xhtml" />
+      </rule>
+      <rule if-outcome="goRa">
+        <redirect view-id="/pages/management/ra.xhtml" />
+      </rule>
+      <rule if-outcome="goGeobusquedas">
+        <redirect view-id="/pages/management/geobusquedas.xhtml" />
+      </rule>
+      <rule if-outcome="goMapea">
+        <redirect view-id="/pages/management/mapea.xhtml" />
+      </rule>
+      <rule if-outcome="goDescargas">
+        <redirect view-id="/pages/management/descargas.xhtml" />
+      </rule>
+      <rule if-outcome="goConfiguration">
+        <redirect view-id="/pages/configuration/configuration.xhtml" />
+      </rule>
+    </navigation>
+  </page>
+  <page view-id="/pages/management/descargas.xhtml" login-required="true">
+    <description>Servicio de descargas</description>
+    <navigation>
+      <rule if-outcome="goNewIg">
+        <redirect view-id="/pages/newig.xhtml" />
+      </rule>
+      <rule if-outcome="goViewIg">
+         <redirect view-id="/pages/management/ig.xhtml">
+            <param name="fromExternal" value="#{true}" />
+        </redirect>
+      </rule>
+      <rule if-outcome="goOgc">
+        <redirect view-id="/pages/management/ogc.xhtml" />
+      </rule>
+      <rule if-outcome="goRa">
+        <redirect view-id="/pages/management/ra.xhtml" />
+      </rule>
+      <rule if-outcome="goGeobusquedas">
+        <redirect view-id="/pages/management/geobusquedas.xhtml" />
+      </rule>
+      <rule if-outcome="goMapea">
+        <redirect view-id="/pages/management/mapea.xhtml" />
+      </rule>
+      <rule if-outcome="goDescargas">
+        <redirect view-id="/pages/management/descargas.xhtml" />
+      </rule>
+      <rule if-outcome="goConfiguration">
+        <redirect view-id="/pages/configuration/configuration.xhtml" />
+      </rule>
+    </navigation>
+  </page>
+  <page view-id="/pages/configuration/configuration.xhtml" login-required="true">
+    <description>Configuración del panel</description>
+    <begin-conversation join="true" />
+    <navigation>
+      <rule if-outcome="goNewIg">
+        <redirect view-id="/pages/newig.xhtml" />
+      </rule>
+      <rule if-outcome="goViewIg">
+         <redirect view-id="/pages/management/ig.xhtml">
+              <param name="fromExternal" value="#{true}" />
+          </redirect>
+      </rule>
+      <rule if-outcome="goOgc">
+        <redirect view-id="/pages/management/ogc.xhtml" />
+      </rule>
+      <rule if-outcome="goRa">
+        <redirect view-id="/pages/management/ra.xhtml" />
+      </rule>
+      <rule if-outcome="goGeobusquedas">
+        <redirect view-id="/pages/management/geobusquedas.xhtml" />
+      </rule>
+      <rule if-outcome="goMapea">
+        <redirect view-id="/pages/management/mapea.xhtml" />
+      </rule>
+      <rule if-outcome="goDescargas">
+        <redirect view-id="/pages/management/descargas.xhtml" />
+      </rule>
+    </navigation>
+  </page>
+
+  <!-- Problemas con las conversaciones -->
+  <exception class="org.jboss.seam.NoConversationException">
+    <redirect view-id="/pages/index.xhtml">
+      <message severity="WARN">No existe una conversación con este
+        identificador asignada a usted, por favor, vuelva a intentarlo.
+      </message>
+    </redirect>
+  </exception>
+  <exception class="java.lang.IllegalStateException">
+    <redirect view-id="/pages/index.xhtml">
+      <message severity="WARN">No existe una conversación con este
+        identificador asignada a usted, por favor, vuelva a intentarlo.
+      </message>
+    </redirect>
+  </exception>
+  <!-- expired session -->
+  <exception class="javax.faces.application.ViewExpiredException">
+    <redirect view-id="/pages/index.xhtml" />
+  </exception>
+
+  <!-- Normalmente ocurre cuando el usuario accede a una página que contiene 
+    un tag la conversación no esta disponible -->
+  <exception class="com.sun.facelets.tag.TagAttributeException">
+    <redirect view-id="/pages/index.xhtml">
+      <message>No existe una conversación con este identificador
+        asignada a usted, por favor, vuelva a intentarlo.</message>
+    </redirect>
+  </exception>
+
+  <!-- Control de excepciones no controladas de la aplicación. -->
+  <exception class="java.lang.Throwable">
+    <redirect view-id="/errores/error.xhtml" />
+  </exception>
+  <exception>
+    <redirect view-id="/errores/error.xhtml" />
+  </exception>
+</pages>

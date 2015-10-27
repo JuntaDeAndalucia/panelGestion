@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<ui:component xmlns="http://www.w3.org/1999/xhtml" xml:lang="es"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:rich="http://richfaces.org/rich"
+  xmlns:s="http://jboss.com/products/seam/taglib">
+
+  <h:panelGrid columns="1" width="100%">
+    <rich:dataTable width="100%" value="#{gicontroller.metadata}" var="info" rendered="#{wscontroller.selectedTable}"
+      styleClass="marginAuto alignCenter" rowClasses="fila1, fila2">
+      <h:column>
+        <f:facet name="header">
+          <h:outputText value="#{msg['ig.metadata.description']}" />
+        </f:facet>
+        <h:outputText value="#{info.description}" />
+      </h:column>
+      <h:column>
+        <f:facet name="header">
+          <h:outputText value="#{msg['ig.metadata.value']}" />
+        </f:facet>
+        <h:outputText value="#{info.value}" />
+      </h:column>
+    </rich:dataTable>
+  </h:panelGrid>
+</ui:component>

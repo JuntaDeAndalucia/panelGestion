@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<ui:component xmlns="http://www.w3.org/1999/xhtml" xml:lang="es"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:rich="http://richfaces.org/rich"
+  xmlns:s="http://jboss.com/products/seam/taglib">
+
+   <h:panelGrid columns="1" width="100%">
+      <!-- ========================================= -->
+      <!-- SERVICES -->
+      <!-- ========================================= -->
+      <rich:dataTable var="service" width="100%"
+        value="#{ogccontroller.services}"
+        rendered="#{not empty ogccontroller.services}"
+        styleClass="marginAuto" rowClasses="fila1, fila2">
+        <h:column>
+          <f:facet name="header">
+            <h:outputText value="#{msg['ogc.services.url']}" />
+          </f:facet>
+          <h:outputText value="#{service.url}" />
+        </h:column>
+        <h:column>
+          <f:facet name="header">
+            <h:outputText value="#{msg['ogc.services.layer']}" />
+          </f:facet>
+          <h:outputText value="#{service.name}" />
+        </h:column>
+        <h:column>
+          <f:facet name="header">
+            <h:outputText value="#{msg['ogc.services.check']}" />
+          </f:facet>
+          <h:outputLink target="_blank" value="#{service.testServiceUrl}">
+            <h:outputText value="Ir" />
+          </h:outputLink>
+        </h:column>
+      </rich:dataTable>
+   </h:panelGrid>
+</ui:component>

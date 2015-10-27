@@ -1,0 +1,30 @@
+<ui:composition template="/template/master-index.xhtml"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:rich="http://richfaces.org/rich"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:s="http://jboss.com/products/seam/taglib">
+  <ui:param name="initPage" value="true" />
+  <ui:define name="content">
+    <h:form id="loginform" style="text-align: center;">
+      <s:div styleClass="login-form">
+        <h2><h:outputText value="#{msg['login.title']}"/></h2>
+        <h:panelGrid columns="2" width="100%">
+          <h:outputLabel for="username" value="#{msg['login.label.user']}" />
+          <h:inputText id="username" value="#{credentials.username}" />
+          <h:outputLabel for="userpass" value="#{msg['login.label.password']}" />
+          <h:inputSecret id="userpass" value="#{credentials.password}" />
+          <rich:spacer width="10" />
+          <h:commandButton styleClass="botones" value="#{msg['login.button.login']}" action="#{identity.login}" />
+        </h:panelGrid>
+      </s:div>
+      <h:outputText value="#{authenticator.failedLoginMessage}" rendered="#{authenticator.failedLoginMessage ne null}"
+        styleClass="error" style="font-size: 1.2em; font-weight: normal; margin: 0;" />
+    </h:form>
+  </ui:define>
+</ui:composition>
+
+
+

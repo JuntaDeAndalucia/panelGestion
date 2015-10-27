@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<ui:component xmlns="http://www.w3.org/1999/xhtml" xml:lang="es"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:rich="http://richfaces.org/rich"
+  xmlns:s="http://jboss.com/products/seam/taglib">
+
+  <h:panelGrid columns="1" width="100%">
+  <!-- ========================================= -->
+      <!-- GEOSERVERS -->
+      <!-- ========================================= -->
+      <h:panelGrid columns="3" id="geoserverPanel" columnClasses="formulario">
+        <h:outputLabel value="#{msg['ogc.datastore.geoservers']} (*):" />
+        <h:selectOneMenu id="geoserverVOSelect" value="#{ogccontroller.selectedGeoserver}"
+                    disabled="#{(not wscontroller.selectedTable)}">
+        
+            
+            <f:converter converterId="geoserverConverter" />
+	        <f:selectItem itemLabel="#{msg['select.empty']}" itemValue="#{null}" noSelectionOption="true" />
+            <s:selectItems value="#{ogccontroller.geoservers}" var="geoserver" label="#{geoserver.geoserverAUX.geoserverUrl}" />
+            
+             <a4j:support event="onchange" reRender="workspacePanel" ajaxSingle="true" action="#{ogccontroller.onSelectedGeoserverVO()}" />
+        </h:selectOneMenu>     
+      </h:panelGrid>
+
+      <!-- ========================================= -->
+      <!-- WORKSPACE -->
+      <!-- ========================================= -->
+      <h:panelGrid columns="3" id="workspacePanel" columnClasses="formulario">
+        <h:outputLabel value="#{msg['ogc.datastore.workspace']} (*):" />
+        <h:selectOneMenu id="workspaceSelect" value="#{ogccontroller.workspace}"
+            rendered="#{not ogccontroller.newWorkspace}"
+            disabled="#{(not wscontroller.selectedTable) and ( (empty ogccontroller.workspaces) or (empty ogccontroller.selectedGeoserver == null))}">
+            <f:selectItem itemLabel="#{msg['select.empty']}" itemValue="#{null}" />
+            <s:selectItems value="#{ogccontroller.workspaces}" var="workspace" label="#{workspace}" itemValue="#{workspace}" />
+            <a4j:support event="onchange" reRender="genericErrorMessagePanel,publishServiceButtonPanel,datastorePanel" ajaxSingle="true" action="#{ogccontroller.loadDatastores()}" />
+        </h:selectOneMenu>
+        <h:inputText id="newWorkspaceInput" value="#{ogccontroller.workspace}"
+            style="width: 190px; margin-left: 2px;"
+            rendered="#{ogccontroller.newWorkspace}"
+            disabled="#{(not wscontroller.selectedTable)  or (empty ogccontroller.selectedGeoserver == null)}"/><!-- or (empty ogccontroller.workspaces) -->
+       <h:panelGrid columns="4">
+         <a4j:commandButton action="#{ogccontroller.changeWorkspace()}" 
+          rendered="#{wscontroller.selectedTable}" immediate="true"
+          styleClass="#{(ogccontroller.newWorkspace)?'btn-combo':'btn-nuevo'}"
+          title="#{(ogccontroller.newWorkspace)?msg['ogc.workspace.selectbutton']:msg['ogc.workspace.newbutton']}"
+          reRender="workspacePanel,datastorePanel,publishServiceButtonPanel" />
+          <rich:spacer width="10px"/>
+         <a4j:commandButton action="#{ogccontroller.saveWorkspace()}" 
+          rendered="#{ogccontroller.newWorkspace}" inmediate="true"
+          styleClass="btn-save" title="#{msg['ogc.workspace.save']}"
+          reRender="workspacePanel,datastorePanelForm,datastorePanelButtons,workspaceMessagePanel,publishServiceButtonPanel" />
+          <a4j:outputPanel id="workspaceMessagePanel">
+            <h:messages globalOnly="true" errorClass="error" fatalClass="error" infoClass="success" />
+          </a4j:outputPanel>
+        </h:panelGrid>
+      </h:panelGrid>
+      
+      <!-- ========================================= -->
+      <!-- DATA STORE -->
+      <!-- ========================================= -->
+      <h:panelGrid columns="3" id="datastorePanel"  columnClasses="formulario">
+        <h:outputLabel value="#{msg['ogc.datastore.datastore']} (*):" />
+        <h:panelGrid columns="2" id="datastorePanelForm" width="50%">
+          <h:selectOneMenu id="datastoreSelect" value="#{ogccontroller.datastore}"
+            rendered="#{(not ogccontroller.newDatastore) and (not empty ogccontroller.datastores)}"
+            disabled="#{(not wscontroller.selectedTable) or (empty ogccontroller.datastores)}">
+              <f:selectItem itemLabel="#{msg['select.empty']}" itemValue="#{null}" />
+              <s:selectItems value="#{ogccontroller.datastores}" var="datastore" label="#{datastore}" itemValue="#{datastore}" />
+              <a4j:support event="onchange" reRender="publishServiceButtonPanel" ajaxSingle="true" />
+          </h:selectOneMenu>
+          <h:inputText id="newDatastoreInput" value="#{ogccontroller.datastore}"
+              style="width: 190px; margin-left: 2px;"
+              rendered="#{ogccontroller.newDatastore or (empty ogccontroller.datastores) }"
+            disabled="#{(not wscontroller.selectedTable)}"/>
+              
+        </h:panelGrid>
+        <h:panelGrid columns="2">
+         <a4j:outputPanel id="datastorePanelButtons">
+           <a4j:commandButton action="#{ogccontroller.changeDatastore()}" 
+            rendered="#{(not empty ogccontroller.workspace) and (not empty ogccontroller.datastores)}" immediate="true"
+            styleClass="#{(ogccontroller.newDatastore)?'btn-combo':'btn-nuevo'}"
+            title="#{(ogccontroller.newDatastore)?msg['ogc.datastore.selectbutton']:msg['ogc.datastore.newbutton']}"
+            reRender="datastorePanel,publishServiceButtonPanel" />
+            <rich:spacer width="10px"/>
+           <a4j:commandButton action="#{ogccontroller.saveDatastore()}"  inmediate="true"
+            rendered="#{(not empty ogccontroller.workspace) and (ogccontroller.newDatastore or (empty ogccontroller.datastores))}"
+            styleClass="btn-save" title="#{msg['ogc.datastore.save']}"
+            reRender="datastorePanel,datastoreMessagePanel,publishServiceButtonPanel" />
+          </a4j:outputPanel>
+          <a4j:outputPanel id="datastoreMessagePanel">
+            <h:messages globalOnly="true" errorClass="error" fatalClass="error" infoClass="success" />
+          </a4j:outputPanel>
+        </h:panelGrid>
+      </h:panelGrid>
+      
+      <!-- ========================================= -->
+      <!-- TITLE -->
+      <!-- ========================================= -->
+      <h:panelGrid id="title" columns="3"  columnClasses="formulario">
+        <h:outputLabel value="#{msg['ogc.datastore.service.title']}:" />
+        <h:inputText id="titleInputText" value="#{ogccontroller.title}" 
+           disabled="#{not wscontroller.selectedTable}" 
+           style="width: 190px; margin-left: 2px;" />
+        <rich:message for="titleInputText" styleClass="error" />
+      </h:panelGrid>
+      
+      <!-- ========================================= -->
+      <!-- NAME -->
+      <!-- ========================================= -->
+      <h:panelGrid id="name" columns="3" columnClasses="formulario">
+        <h:outputLabel value="#{msg['ogc.datastore.service.name']}:" />
+        <!-- El nombre está desactivado ya que debe tener el mismo nombre que la tabla por que si no
+        usando la API Rest de Geoserver se intentará crear un feature type nuevo teniendo que pasarle los
+        atributos -->
+        <h:inputText id="nameInputText" value="#{ogccontroller.name}" style="width: 190px; margin-left: 2px;" disabled="true"/>
+        <rich:message for="nameInputText" styleClass="error" />
+      </h:panelGrid>
+      
+      <!-- ========================================= -->
+      <!-- PUBLISH BUTTON -->
+      <!-- ========================================= -->
+      <a4j:outputPanel id="publishServiceButtonPanel">
+        <s:div styleClass="alignCenter">
+            <rich:spacer height="30" />
+            <a4j:commandButton value="#{msg['ogc.publish']}" id="publishServiceButtonId"
+              styleClass="botones" action="#{ogccontroller.publishServices()}"
+              reRender="genericErrorMessagePanel,publicServicesPanel,geoserverAccessPanel"
+              disabled="#{(empty ogccontroller.datastore) or (ogccontroller.newDatastore)}" />
+        </s:div>
+      </a4j:outputPanel>
+            
+   </h:panelGrid>
+</ui:component>

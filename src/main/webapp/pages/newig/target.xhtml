@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<ui:component xmlns="http://www.w3.org/1999/xhtml" xml:lang="es"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:rich="http://richfaces.org/rich"
+  xmlns:s="http://jboss.com/products/seam/taglib">
+
+  <h:panelGrid columns="2" width="100%">
+      <!-- ========================================= -->
+      <!-- DATA BASE -->
+      <!-- ========================================= -->
+      <h:panelGroup>
+        <h:outputText value="#{msg['ig.new.database']} (*):" />
+        <h:selectOneMenu 
+            id="dataBaseSelect"
+            value="#{newgicontroller.dataBase}"
+            required="#{newgicontroller.readFilePhase}">
+          <f:converter converterId="dataBaseConverter" />
+          <f:selectItem itemLabel="#{msg['select.empty']}"
+            itemValue="#{null}" />
+          <s:selectItems value="#{newgicontroller.dataBases}"
+            var="dataBase" label="#{dataBase.alias}" />
+          <a4j:support event="onchange" reRender="schema,dividerPanel,fileConfigurationPanel,loadButtonPanel,progressBarPanel"
+            ajaxSingle="true" action="#{newgicontroller.loadSchemas()}" />
+        </h:selectOneMenu>
+        <rich:message for="dataBaseSelect" styleClass="error" />
+      </h:panelGroup>
+
+      <!-- ========================================= -->
+      <!-- SCHEMA -->
+      <!-- ========================================= -->
+      <h:panelGrid columns="3" id="schema">
+        <h:outputLabel value="#{msg['ig.new.schema']} (*):" />
+        <h:selectOneMenu id="schemasSelect" value="#{newgicontroller.schema}"
+          required="#{newgicontroller.readFilePhase}"
+          disabled="#{empty newgicontroller.schemas}"
+          rendered="#{(not newgicontroller.newSchema) and (not empty newgicontroller.schemas)}">
+            <f:converter converterId="schemaConverter" />
+            <f:selectItem itemLabel="#{msg['select.empty']}"
+              itemValue="#{null}" noSelectionOption="true" />
+            <s:selectItems value="#{newgicontroller.schemas}" var="schema"
+              label="#{schema.name}" />
+            <a4j:support event="onchange" reRender="table,dividerPanel,fileConfigurationPanel,loadButtonPanel,progressBarPanel"
+              ajaxSingle="true" action="#{newgicontroller.loadTables()}" />
+        </h:selectOneMenu>
+        <h:inputText id="newschema" value="#{newgicontroller.schemaName}"
+          required="#{newgicontroller.readFilePhase}"
+          style="width: 100px;"
+          rendered="#{newgicontroller.newSchema or (empty newgicontroller.schemas)}"
+          disabled="#{newgicontroller.dataBase eq null}" />
+        <ui:remove>
+        <a4j:commandButton reRender="schema,table,dividerPanel,fileConfigurationPanel,loadButtonPanel,progressBarPanel"
+          action="#{newgicontroller.changeSchema()}" immediate="true"
+          styleClass="#{(newgicontroller.newSchema)?'btn-combo':'btn-nuevo'}"
+          title="#{(newgicontroller.newSchema)?msg['ig.new.predefined_schema.title']:msg['ig.new.new_schema.title']}"
+          rendered="#{not empty newgicontroller.schemas}" />
+        <rich:message for="newschema" styleClass="error" />
+        </ui:remove>
+        <rich:message for="schemasSelect" styleClass="error" />
+      </h:panelGrid>
+
+      <!-- ========================================= -->
+      <!-- TABLE RADIO BUTTONS -->
+      <!-- ========================================= -->
+      <h:selectOneRadio value="#{newgicontroller.taskvo.taskEntity.update}"
+        layout="pageDirection" styleClass="new-table">
+        <f:selectItem itemLabel="#{msg['ig.new.new_table']}"
+          itemValue="#{false}" />
+        <f:selectItem itemLabel="#{msg['ig.new.update_table']}"
+          itemValue="#{true}" itemDisabled="#{newgicontroller.newSchema}" />
+        <a4j:support reRender="table,dividerPanel,fileConfigurationPanel,loadButtonPanel,progressBarPanel"
+            event="onclick"
+            ajaxSingle="true"
+            action="#{newgicontroller.setProcessFilePhase(false)}">
+           <f:actionListener binding="#{newgicontroller.checkValidTable()}"/>
+        </a4j:support>
+      </h:selectOneRadio>
+
+      <!-- ========================================= -->
+      <!-- TABLE -->
+      <!-- ========================================= -->
+      <h:panelGrid id="table" columns="3">
+        <h:outputLabel value="#{msg['ig.new.table_name']} (*):" />
+        <h:inputText id="newTableInputText"
+          value="#{newgicontroller.tableName}"
+          required="#{newgicontroller.readFilePhase and (not newgicontroller.taskvo.taskEntity.update)}"
+          style="width: 190px;"
+          disabled="#{newgicontroller.taskvo.taskEntity.update or ((newgicontroller.schema eq null) and (newgicontroller.schemaName eq null))}" >
+          <a4j:support event="onblur" action="#{newgicontroller.checkValidTable()}" reRender="table,genericErrorMessage"/>
+        </h:inputText>
+        <rich:message for="newTableInputText" styleClass="error" />
+        <h:outputLabel value="#{msg['ig.new.table']} (*):" />
+        <h:selectOneMenu value="#{newgicontroller.table}" id="tablesSelect"
+          required="#{newgicontroller.readFilePhase and newgicontroller.taskvo.taskEntity.update}"
+          disabled="#{(empty newgicontroller.tables) or (newgicontroller.newSchema) or (not newgicontroller.taskvo.taskEntity.update)}">
+          <f:converter converterId="tableConverter" />
+          <f:selectItem itemLabel="#{msg['select.empty']}"
+            itemValue="#{null}" noSelectionOption="true" />
+          <s:selectItems value="#{newgicontroller.tables}" var="table"
+            label="#{table.name}" />
+          <a4j:support event="onchange"
+            reRender="table,genericErrorMessage,readButtonPanel,dividerPanel,fileConfigurationPanel,loadButtonPanel,progressBarPanel"
+            ajaxSingle="true" action="#{newgicontroller.checkValidTable()}" />
+        </h:selectOneMenu>
+        <rich:message for="tablesSelect" styleClass="error" />
+      </h:panelGrid>
+   </h:panelGrid>
+</ui:component>

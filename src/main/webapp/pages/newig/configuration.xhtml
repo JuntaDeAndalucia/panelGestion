@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<ui:component xmlns="http://www.w3.org/1999/xhtml" xml:lang="es"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:rich="http://richfaces.org/rich"
+  xmlns:s="http://jboss.com/products/seam/taglib"
+  xmlns:utils="http://panel-sigc.juntadenadalucia.es/utils">
+
+  <h:panelGrid columns="1" width="100%">
+    <h:panelGrid columns="2" width="100%">
+      <!-- PROJECTION -->
+      <h:panelGrid columns="2" styleClass="alignLeft">
+          <h:outputLabel value="#{msg['ig.new.projection']}:" /><h:outputText value="#{newgicontroller.taskvo.taskEntity.table.epsg}" rendered="#{newgicontroller.taskvo.taskEntity.update or (newgicontroller.taskvo.taskEntity.source.type == 'SHAPEFILE')}"/>
+          <h:selectOneMenu value="#{newgicontroller.taskvo.taskEntity.table.epsg}"
+             label="#{msg['ig.new.projection']}:" 
+             rendered="#{(not newgicontroller.taskvo.taskEntity.update) and (newgicontroller.taskvo.taskEntity.source.type == 'CSV')}">
+              <s:selectItems value="#{newgicontroller.projections}" var="projection" label="#{projection}" itemValue="#{projection}"/>
+          </h:selectOneMenu>
+      </h:panelGrid>
+      <!-- FIRST LINE AS HEADER -->
+      <h:panelGrid columns="2" styleClass="alignLeft" rendered="#{newgicontroller.taskvo.taskEntity.source.type == 'CSV'}">
+          <h:outputLabel value="#{msg['ig.new.header']}:" />
+          <h:selectBooleanCheckbox value="#{newgicontroller.taskvo.firstLineHeader}">
+          </h:selectBooleanCheckbox>
+      </h:panelGrid>
+    </h:panelGrid>
+    
+    <rich:spacer height="15" />
+    <rich:separator height="1" lineType="solid"/>
+    <rich:spacer height="5" />
+      
+     <!-- HEAD CONFIGURATION -->
+     <a4j:outputPanel id="headersconfig" width="100%">
+        <!-- COLUMNS FOR NEW TABLE -->
+        <rich:dataTable var="column" value="#{newgicontroller.taskvo.columns}" width="100%"
+           rendered="#{(not empty newgicontroller.taskvo.columns) and (not newgicontroller.taskvo.taskEntity.update)}" styleClass="marginAuto" style="text-align: center;" rowClasses="fila1, fila2">
+          <h:column>
+              <f:facet name="header">
+                 <h:outputText value="#{msg['ig.new.head.create']}" />
+              </f:facet>
+              <h:selectBooleanCheckbox value="#{column.inTable}">
+                 <a4j:support reRender="headersconfig" event="onclick"/>
+              </h:selectBooleanCheckbox>
+          </h:column>
+          <h:column>
+              <f:facet name="header">
+                 <h:outputText value="#{msg['ig.new.head.column']}" />
+              </f:facet>
+              <h:outputText value="#{utils:limitLength(column.text, 40)}" />
+          </h:column>
+          <h:column>
+              <f:facet name="header">
+                 <h:outputText value="#{msg['ig.new.head.name']}" />
+              </f:facet>
+              <h:inputText value="#{column.nameOnTable}" disabled="#{not column.inTable}"/>
+          </h:column>
+          <h:column>
+              <f:facet name="header">
+                 <h:outputText value="#{msg['ig.new.head.type']}" />
+              </f:facet>
+              <h:selectOneMenu id="bdtype" value="#{column.type}" disabled="#{not column.inTable}">
+                  <s:selectItems value="#{newgicontroller.dbTypes}" var="type" label="#{type}" itemValue="#{type}"/>
+              </h:selectOneMenu>
+          </h:column>
+          <h:column>
+              <f:facet name="header">
+                 <h:outputText value="#{msg['ig.new.head.length']}" />
+              </f:facet>
+              <h:inputText value="#{column.length}" style="width: 30px;" disabled="#{not column.inTable}"/>
+          </h:column>
+          <h:column>
+              <f:facet name="header">
+                 <h:outputText value="#{msg['ig.new.head.precision']}" />
+              </f:facet>
+              <h:inputText value="#{column.precision}" style="width: 30px;" disabled="#{not column.inTable}"/>
+          </h:column>
+        </rich:dataTable>
+        <!-- COLUMNS FOR UPDATING -->
+        <rich:dataTable var="column" value="#{newgicontroller.taskvo.tableColumns}" 
+           rendered="#{(not empty newgicontroller.taskvo.tableColumns) and newgicontroller.taskvo.taskEntity.update}" styleClass="marginAuto" rowClasses="fila1, fila2">
+          <h:column>
+              <f:facet name="header">
+                 <h:outputText value="#{msg['ig.new.head.name']}" />
+              </f:facet>
+              <h:outputText value="#{column.nameOnTable}" />
+          </h:column>
+          <h:column>
+              <f:facet name="header">
+                 <h:outputText value="#{msg['ig.new.head.type']}" />
+              </f:facet>
+              <h:outputText value="#{column.type}" />
+          </h:column>
+          <h:column>
+              <f:facet name="header">
+                 <h:outputText value="#{msg['ig.new.head.length']}" />
+              </f:facet>
+              <h:outputText value="#{column.length}" />
+          </h:column>
+          <h:column> 
+              <f:facet name="header">
+                 <h:outputText value="#{msg['ig.new.head.precision']}" />
+              </f:facet>
+              <h:outputText value="#{column.precision}" />
+          </h:column>
+          <h:column>
+              <f:facet name="header">
+                 <h:outputText value="#{msg['ig.new.head.column']}" />
+              </f:facet>
+              <h:panelGrid columns="2">
+              <h:selectOneMenu value="#{column.filePosition}" disabled="#{empty newgicontroller.taskvo.columns}"
+                rendered="#{not column.fromCoordinates and (not empty newgicontroller.taskvo.columns)}">
+                  <f:selectItem itemLabel="#{msg['select.empty']}" itemValue="#{-1}" />
+                  <s:selectItems value="#{newgicontroller.taskvo.columns}" var="fileCol" label="#{utils:limitLength(fileCol.text, 40)}" itemValue="#{fileCol.filePosition}"/>
+              </h:selectOneMenu>
+              <h:outputText value="#{msg['ig.new.column.coordinates.x']}" rendered="#{column.fromCoordinates}"/>
+              <h:selectOneMenu value="#{column.fileCoordinateXPosition}" rendered="#{column.fromCoordinates and (not empty newgicontroller.taskvo.columns)}">
+                  <f:selectItem itemLabel="#{msg['select.empty']}" itemValue="#{-1}" />
+                  <s:selectItems value="#{newgicontroller.taskvo.columns}" var="fileColx" label="#{utils:limitLength(fileColx.text, 40)}" itemValue="#{fileColx.filePosition}"/>
+              </h:selectOneMenu>
+              <h:outputText value="#{msg['ig.new.column.coordinates.y']}" rendered="#{column.fromCoordinates}"/>
+              <h:selectOneMenu value="#{column.fileCoordinateYPosition}" rendered="#{column.fromCoordinates and (not empty newgicontroller.taskvo.columns)}">
+                  <f:selectItem itemLabel="#{msg['select.empty']}" itemValue="#{-1}" />
+                  <s:selectItems value="#{newgicontroller.taskvo.columns}" var="fileColy" label="#{utils:limitLength(fileColy.text, 40)}" itemValue="#{fileColy.filePosition}"/>
+              </h:selectOneMenu>
+              </h:panelGrid>
+              <!-- COORDINATE COLUMN -->
+              <h:selectBooleanCheckbox value="#{column.fromCoordinates}" 
+                 rendered="#{(newgicontroller.table.geomField eq column.nameOnTable) and (newgicontroller.taskvo.taskEntity.source.type == 'CSV')}">
+                 <a4j:support reRender="headersconfig" event="onclick"/>
+              </h:selectBooleanCheckbox>
+              <h:outputText value="#{msg['ig.new.column.coordinates']}" rendered="#{(newgicontroller.table.geomField eq column.nameOnTable) and (newgicontroller.taskvo.taskEntity.source.type == 'CSV')}" />
+          </h:column>
+        </rich:dataTable>
+     </a4j:outputPanel>
+  </h:panelGrid>
+</ui:component>

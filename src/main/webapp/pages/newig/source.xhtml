@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<ui:component xmlns="http://www.w3.org/1999/xhtml" xml:lang="es"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:rich="http://richfaces.org/rich"
+  xmlns:s="http://jboss.com/products/seam/taglib">
+
+    <!-- NOTE -->
+    <div class="nota">
+      <h:outputText value="Puede utilizar el " />
+      <h:outputLink target="_blank"
+        value="#{newgicontroller.nordirGeodirUrl}">
+        <h:outputText value="Geodir-Nordir" />
+        <img
+          src="#{facesContext.externalContext.requestContextPath}/static/images/template/next.png" />
+      </h:outputLink>
+      <h:outputText
+        value=" para geocodificar previamente el fichero si lo necesita" />
+    </div>
+
+
+    <h:panelGrid columns="2" width="100%" id="source"
+      styleClass="source">
+      <!-- RADIO BUTTONS -->
+      <h:selectOneRadio
+        value="#{newgicontroller.taskvo.taskEntity.source.remote}"
+        layout="pageDirection" styleClass="source-radio">
+        <f:selectItem
+          itemLabel="#{msg['ig.new.upload_file']} (hasta #{newgicontroller.fileLimit}MB)"
+          itemValue="#{false}" />
+        <f:selectItem itemLabel="#{msg['ig.new.select_file']}"
+          itemValue="#{true}" />
+        <a4j:support
+          reRender="localfile,repository,sourceList,dividerPanel,readButtonPanel,dividerPanel,fileConfigurationPanel,loadButtonPanel,progressBarPanel"
+          action="#{newgicontroller.resetSources()}" event="onclick"
+          ajaxSingle="true" />
+      </h:selectOneRadio>
+
+      <h:panelGrid columns="1" styleClass="alignCenter source-cont" cellpadding="0" cellspacing="0">
+        <!-- LOCAL FILE -->
+        <h:panelGrid id="localfile" columns="2" styleClass="alignCenter"
+          width="100%">
+          <rich:fileUpload
+            fileUploadListener="#{newgicontroller.processLocalFile}"
+            addControlLabel="#{msg['ig.new.add_file_btn']}"
+            sizeErrorLabel="#{msg['ig.new.error_size']}"
+            sizeErrorLabelClass="error" cancelEntryControlLabel=""
+            clearControlLabel="" clearAllControlLabel=""
+            listHeight="40px" uploadListClass="upload-box"
+            addButtonClass="upload-btn" immediateUpload="true"
+            allowFlash="false"
+            maxFilesQuantity="1"
+            disabled="#{newgicontroller.taskvo.taskEntity.source.remote}"
+            styleClass="marginAuto upload">
+            <a4j:support event="onuploadcomplete"
+              reRender="clearFileButtonPanel,dividerPanel,readButtonPanel,genericErrorMessage" />
+          </rich:fileUpload>
+          <a4j:outputPanel id="clearFileButtonPanel">
+            <a4j:commandButton styleClass="btn-file-clear" action="#{newgicontroller.resetSources()}"
+                ajaxSingle="true"
+                disabled="#{newgicontroller.taskvo.taskEntity.source.remote}"
+                rendered="#{newgicontroller.readFilePhase}"
+                reRender="localfile,repository,sourceList,dividerPanel,readButtonPanel,dividerPanel,fileConfigurationPanel,loadButtonPanel,progressBarPanel">
+             </a4j:commandButton>
+          </a4j:outputPanel>
+        </h:panelGrid>
+        <!-- REMOTE FILE -->
+        <h:panelGrid id="repository" columns="#{newgicontroller.newRepository? 2 : 5}"
+          styleClass="repository">
+          <h:outputLabel value="#{msg['ig.new.repository']}:" />
+          <h:selectOneMenu id="repo" value="#{newgicontroller.repository}" rendered="#{not newgicontroller.newRepository}"
+            disabled="#{not newgicontroller.taskvo.taskEntity.source.remote}">
+            <f:converter converterId="repositoryConverter" />
+            <s:selectItems value="#{newgicontroller.repositories}" var="repository" label="#{repository.alias}" />
+            <a4j:support event="onchange" reRender="sourceList,genericErrorMessage,dividerPanel,readButtonPanel,fileConfigurationPanel,loadButtonPanel,progressBarPanel"
+            ajaxSingle="true" action="#{newgicontroller.browseRepository}" />
+          </h:selectOneMenu>
+          <h:inputText id="newrepo"
+            value="#{newgicontroller.repositoryUrl}"
+            required="#{newgicontroller.newRepository}"
+            placeholder="http://"
+            style="width: 300px; margin-left: 10px;"
+            rendered="#{newgicontroller.newRepository}"
+            disabled="#{not newgicontroller.taskvo.taskEntity.source.remote}">
+            <f:validateLength minimum="8" />
+          </h:inputText>
+          <h:outputLabel value="#{msg['ig.new.repository.user']}:"
+            rendered="#{newgicontroller.newRepository}" />
+          <h:inputText id="newrepouser"
+            value="#{newgicontroller.repositoryUser}"
+            style="width: 150px; margin-left: 10px;"
+            rendered="#{newgicontroller.newRepository}"
+            disabled="#{not newgicontroller.taskvo.taskEntity.source.remote}" />
+          <h:outputLabel value="#{msg['ig.new.repository.password']}:"
+            rendered="#{newgicontroller.newRepository}" />
+          <h:panelGroup>
+            <h:inputSecret id="newrepopass"
+              value="#{newgicontroller.repositoryPassword}"
+              style="width: 150px; margin-left: 10px;"
+              rendered="#{newgicontroller.newRepository}"
+              disabled="#{not newgicontroller.taskvo.taskEntity.source.remote}" />
+            <a4j:commandButton value="" alt="#{msg['ig.new.connect']}"
+              styleClass="btn-conectar" title="#{msg['ig.new.connect']}"
+              reRender="sourceList,genericErrorMessage,readButtonPanel,dividerPanel,fileConfigurationPanel,loadButtonPanel,progressBarPanel"
+              rendered="#{newgicontroller.taskvo.taskEntity.source.remote}"
+              action="#{newgicontroller.browseRepository}" />
+            <a4j:commandButton
+              styleClass="#{(newgicontroller.newRepository)?'btn-combo':'btn-nuevo'}"
+              title="#{(newgicontroller.newRepository)?msg['ig.new.predefined_repository.title']:msg['ig.new.new_repository.title']}"
+              value="" reRender="repository,sourceList,genericErrorMessage,readButtonPanel,dividerPanel,fileConfigurationPanel,loadButtonPanel,progressBarPanel"
+              rendered="#{newgicontroller.taskvo.taskEntity.source.remote}"
+              action="#{newgicontroller.changeRepository()}"
+              ajaxSingle="true" />
+            <rich:message id="repositoryMessage" for="newrepo"
+              styleClass="error" />
+          </h:panelGroup>
+        </h:panelGrid>
+      </h:panelGrid>
+
+    </h:panelGrid>
+
+    <!-- REMOTE FILES TABLE -->
+    <h:panelGrid id="sourceList" columns="1" width="90%">
+      <rich:dataTable var="file" width="100%"
+        value="#{newgicontroller.repositoryFiles}"
+        rendered="#{not empty newgicontroller.repositoryFiles}"
+        styleClass="marginAuto" rowClasses="fila1, fila2">
+        <h:column>
+          <f:facet name="header">
+            <h:outputText value="#{msg['ig.new.file_name']}" />
+          </f:facet>
+          <h:outputText value="#{file.name}" />
+        </h:column>
+        <h:column>
+          <f:facet name="header">
+            <h:outputText value="#{msg['ig.new.file_type']}" />
+          </f:facet>
+          <h:outputText value="#{file.type}" />
+        </h:column>
+        <h:column>
+          <f:facet name="header">
+            <h:outputText value="#{msg['ig.new.file_size']}" />
+          </f:facet>
+          <s:div rendered="#{file.size ge 0}">
+            <h:outputText value="#{file.formattedSize}" />
+          </s:div>
+          <s:div rendered="#{file.size lt 0}">
+            <h:outputText value="#{msg['ig.new.file_large_size']}" />
+          </s:div>
+        </h:column>
+        <h:column>
+          <f:facet name="header"></f:facet>
+          <a4j:commandButton styleClass="btn-import" ajaxSingle="true"
+            reRender="sourceList,dividerPanel,readButtonPanel" onclick=""
+            action="#{newgicontroller.selectFile(file)}"
+            alt="#{msg['ig.new.select_btn']}"
+            title="#{msg['ig.new.select_btn']}" />
+        </h:column>
+      </rich:dataTable>
+    </h:panelGrid>
+
+    <!-- SRS AND DIVIDER -->
+    <a4j:outputPanel id="dividerPanel">
+      <h:panelGrid columns="1" rendered="#{newgicontroller.readFilePhase}"
+        width="100%">
+        <!-- LINE -->
+        <rich:spacer height="15" />
+        <rich:separator height="1" lineType="solid" />
+        <rich:spacer height="5" />
+
+        <!-- SRS -->
+        <h:panelGrid columns="3" rendered="#{newgicontroller.taskvo.taskEntity.source.type == 'SHAPEFILE'}">
+          <h:outputLabel value="#{msg['ig.new.projection']}:" />
+          <h:selectOneMenu value="#{newgicontroller.taskvo.shapeSrs}" label="#{msg['ig.new.projection']}:">
+            <f:selectItem itemLabel="#{msg['select.shape.srs']}" itemValue="#{null}" />
+            <s:selectItems value="#{newgicontroller.projections}" var="projection" label="#{projection}" itemValue="#{projection}"/>
+          </h:selectOneMenu>
+          <rich:message id="srsMessage" for="sourceSrs" styleClass="error" />
+        </h:panelGrid>
+        
+        <!-- DIVIDER -->
+        <h:panelGrid columns="3" rendered="#{newgicontroller.taskvo.taskEntity.source.type == 'CSV'}">
+          <h:outputLabel value="#{msg['ig.new.file_divider']} (*):" />
+          <h:inputText id="sourceDivider"
+            value="#{newgicontroller.taskvo.taskEntity.source.divider}"
+            style="width: 30px;" required="#{newgicontroller.readFilePhase}">
+            <f:validateLength maximum="1" />
+          </h:inputText>
+          <rich:message id="dividerMessage" for="sourceDivider" styleClass="error" />
+        </h:panelGrid>
+      </h:panelGrid>
+    </a4j:outputPanel>
+</ui:component>

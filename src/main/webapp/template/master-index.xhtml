@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:s="http://jboss.com/products/seam/taglib">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="content-language" content="es" />
+    <meta http-equiv="Content-Script-Type" content="Javascript" />
+    <meta name="description" content="Panel de Gesti&#243;n para el SIGC" />
+    <link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.requestContextPath}/static/css/estilo.css" />
+    <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/static/js/panel-1.0.0.js"></script>
+    <title>
+        <ui:insert name="titulo">
+            <h:outputText value="#{msg['app.title']}" />
+        </ui:insert>
+    </title>
+</head>
+<body>
+  <div id="content">
+    <div id="content2">
+
+      <!-- CABECERA -->
+      <ui:include src="head.xhtml" />
+      <s:div rendered="#{initPage == null}">
+
+        <!-- MIGAS DE PAN -->
+        <ui:include src="breadcrumbs.xhtml" />
+        <!-- PANEL LATERAL -->
+        <ui:include src="leftpanel.xhtml" />
+      </s:div>
+
+      <!-- CONTENIDO -->
+      <div id="contenido3">
+        <ui:insert name="content" />
+      </div>
+      <div class="fila_fin_contenido"></div>
+
+      <!-- PIE DE PAGINA -->
+      <ui:include src="footer.xhtml" />
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,234 @@
+
+<ui:composition template="/template/master-new.xhtml"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:rich="http://richfaces.org/rich"
+  xmlns:s="http://jboss.com/products/seam/taglib" >
+
+  <ui:define name="content">
+    <h:form id="configurationForm" >
+      <s:validateAll>
+          <s:div>
+            <!-- ========================================= -->
+            <!-- ENCABEZADO -->
+            <!-- ========================================= -->
+            <table width="100%">
+              <tr>
+                <td style="float: left;"><h1><h:outputText value="#{msg['configuration.title']}" /></h1></td>
+              </tr>
+            </table>
+            
+            <!-- ========================================= -->
+            <!-- GENERIC ERRORS -->
+            <!-- ========================================= -->
+            <a4j:outputPanel id="genericErrorMessagePanel">
+              <h:messages globalOnly="true" errorClass="error" fatalClass="error" infoClass="success" />
+            </a4j:outputPanel>
+            
+            <!-- ========================================= -->
+            <!-- AVAILABLE OPTIONS -->
+            <!-- ========================================= -->
+            <a4j:outputPanel id="availableOptionsPanel">
+               <s:div style="background-color: rgba(240, 240, 240, 1); border-radius: 5px;">
+                  <h3><h:outputText value="#{msg['configuration.options.title']}" /></h3>
+                  <ui:include src="options.xhtml" />
+               </s:div>
+            </a4j:outputPanel>
+            
+            <rich:spacer height="20px" />
+            
+            <!-- ========================================= -->
+            <!-- DATA BASES -->
+            <!-- ========================================= -->
+            <a4j:outputPanel id="databasesPanel">
+                <h2><h:outputText value="#{msg['configuration.databases.title']}" /></h2>
+                <ui:include src="databases.xhtml" />
+            </a4j:outputPanel>
+            
+            <rich:spacer height="20px" />
+            
+            <!-- ========================================= -->
+            <!-- SCHEMAS -->
+            <!-- ========================================= -->
+            <a4j:outputPanel id="schemasPanel">
+                <h2><h:outputText value="#{msg['configuration.schemas.title']}" /></h2>
+                <ui:include src="schemas.xhtml" />
+            </a4j:outputPanel>
+          </s:div>
+        </s:validateAll>
+    </h:form>
+    
+    <s:div id="dialogs">
+      <!-- ========================================= -->
+      <!-- DATABASE DIALOG -->
+      <!-- ========================================= -->
+      <rich:modalPanel id="databaseDialog" minWidth="725" autosized="true"
+           resizeable="false" moveable="false" showWhenRendered="true" 
+           rendered="#{configurationCtrl.dataBase ne null}" onshow="addPlaceHolder(#{rich:element('dataBaseUrlInput')});">
+        <f:facet name="header">
+          <h:panelGroup>
+            <h:outputText value="#{msg['configuration.option.dialog.title']}"></h:outputText>
+          </h:panelGroup>
+        </f:facet>
+           <h:form id="databaseDialogForm" styleClass="nueva_bd">
+            <h:panelGrid columns="1" width="90%" style="text-align: left;" styleClass="marginAuto">
+                <!-- alias -->
+                <h:panelGrid columns="3" width="100%" styleClass="dataBase alias td">
+                   <h:outputLabel value="#{msg['configuration.database.alias']} (*):" style="width: 150px;" />
+                   <h:inputText id="dataBaseAliasInput" value="#{configurationCtrl.dataBaseVo.alias}" style="width: 150px;" required="true"
+                    styleClass="#{invalid?'error':''}"/>
+                   <rich:message for="dataBaseAliasInput" errorClass="error" fatalClass="error"/>
+                  </h:panelGrid>
+                  
+                <!-- connection URL -->
+                
+                <h:panelGrid columns="3" width="100%" styleClass="dataBase alias td">
+                   <h:outputLabel value="#{msg['configuration.database.host']} (*):" style="width: 150px;" />
+                   <h:inputText id="dataBaseHostInput" value="#{configurationCtrl.dataBaseVo.host}" style="width: 150px;" required="true"
+                    styleClass="#{invalid?'error':''}"/>
+                   <rich:message for="dataBaseAliasInput" errorClass="error" fatalClass="error"/>
+                  </h:panelGrid>
+                  <h:panelGrid columns="3" width="100%" styleClass="dataBase alias td">
+                   <h:outputLabel value="#{msg['configuration.database.puerto']} (*):" style="width: 150px;" />
+                   <h:inputText id="dataBasePuertoInput" value="#{configurationCtrl.dataBaseVo.puerto}" style="width: 150px;" required="true"
+                    styleClass="#{invalid?'error':''}"/>
+                   <rich:message for="dataBaseAliasInput" errorClass="error" fatalClass="error"/>
+                  </h:panelGrid>
+                  <h:panelGrid columns="3" width="100%" styleClass="dataBase alias td">
+                   <h:outputLabel value="#{msg['configuration.database.baseDatos']} (*):" style="width: 150px;" />
+                   <h:inputText id="dataBaseBaseDatosInput" value="#{configurationCtrl.dataBaseVo.baseDatos}" style="width: 150px;" required="true"
+                    styleClass="#{invalid?'error':''}"/>
+                   <rich:message for="dataBaseAliasInput" errorClass="error" fatalClass="error"/>
+                  </h:panelGrid>
+                  <h:panelGrid columns="3" width="100%" styleClass="dataBase alias td">
+         			<h:outputLabel value="#{msg['configuration.database.tipoBD']} (*):" style="width: 150px;" />
+        			<h:selectOneMenu id="dataBaseTipoBDInput" value="#{configurationCtrl.dataBaseVo.tipoBaseDatos}" style="width: 150px;" required="true"
+                    	styleClass="#{invalid?'error':''}">
+        		 		<s:selectItems value="#{configurationCtrl.databaseTypes}" var="databaseType" label="#{databaseType}" itemValue="#{databaseType}" />
+        			</h:selectOneMenu>
+       			 </h:panelGrid>
+       			 <rich:message for="dataBaseUrlInput" errorClass="error" fatalClass="error"/>
+            </h:panelGrid>
+            <h:panelGrid columns="2" width="50%" styleClass="alignCenter marginAuto">
+               <!-- SAVE -->
+               <a4j:commandButton value="#{msg['dialog.button.save']}" styleClass="botones apaisado noMargin" 
+                  action="#{configurationCtrl.saveDataBase}" reRender="dialogs,configurationForm" />
+               <!-- CANCEL -->
+               <a4j:commandButton value="#{msg['dialog.button.cancel']}" styleClass="botones apaisado noMargin"
+                   action="#{configurationCtrl.closeDialog}" reRender="dialogs,configurationForm" ajaxSingle="true" />
+            </h:panelGrid>
+          </h:form>
+      </rich:modalPanel>
+      
+      <!-- ========================================= -->
+      <!-- SCHEMA DIALOG -->
+      <!-- ========================================= -->
+      <rich:modalPanel id="schemaDialog" width="480" height="250"
+           resizeable="false" moveable="false" showWhenRendered="true" 
+           rendered="#{configurationCtrl.schema ne null}" >
+        <f:facet name="header">
+          <h:panelGroup>
+            <h:outputText value="#{msg['configuration.option.dialog.title']}"></h:outputText>
+          </h:panelGroup>
+        </f:facet>
+        <h:form id="schemaDialogForm">
+          <h:panelGrid columns="3"  width="100%" style="text-align: left;" styleClass="schemaTable marginAuto ">
+              <!-- name -->
+              <h:outputLabel value="#{msg['configuration.schema.name']} (*):" />
+              <h:inputText id="schemaNameInput" value="#{configurationCtrl.schema.schemaEntity.name}" required="true"
+                styleClass="#{invalid?'error':''}"/>
+              <rich:message for="schemaNameInput" errorClass="error" fatalClass="error"/>
+              <!-- user -->
+              <h:outputLabel value="#{msg['configuration.schema.user']} (*):" />
+              <h:inputText id="schemaUserInput" value="#{configurationCtrl.schema.schemaEntity.user}" required="true"
+                styleClass="#{invalid?'error':''}"/>
+              <rich:message for="schemaUserInput" errorClass="error" fatalClass="error"/>
+              <!-- password -->
+              <h:outputLabel value="#{msg['configuration.schema.password']} (*):" />
+              <h:inputText id="schemaPassInput" value="#{configurationCtrl.schema.schemaEntity.password}" required="true"
+                styleClass="#{invalid?'error':''}"/>
+              <rich:message for="schemaPassInput" errorClass="error" fatalClass="error"/>
+              <!-- data base -->
+              <h:outputLabel value="#{msg['configuration.schema.dataBase']} (*):" />
+              <h:selectOneMenu id="schemaDatabaseInput" value="#{configurationCtrl.schema.schemaEntity.dataBase}" 
+                disabled="#{configurationCtrl.schema.schemaEntity.id ne 0}" required="true"
+                styleClass="#{invalid?'error':''}">
+                <f:converter converterId="dataBaseConverter" />
+                <f:selectItem itemLabel="#{msg['select.empty']}" itemValue="#{null}" />
+                <s:selectItems value="#{configurationCtrl.dataBases}" var="dataBase" label="#{dataBase.alias}" />
+              </h:selectOneMenu>
+              <rich:message for="schemaDatabaseInput" errorClass="error" fatalClass="error"/>
+              <!-- check create schema -->
+              <h:outputLabel value="#{msg['configuration.schema.create']}:" />
+              <h:selectBooleanCheckbox value="#{configurationCtrl.schema.create}" />
+          </h:panelGrid>
+          <h:panelGrid columns="2" width="50%" styleClass="alignCenter marginAuto">
+             <!-- SAVE -->
+             <a4j:commandButton value="#{msg['dialog.button.save']}" styleClass="botones apaisado" 
+                action="#{configurationCtrl.saveSchema}" reRender="dialogs,configurationForm" />
+             <!-- CANCEL -->
+             <a4j:commandButton value="#{msg['dialog.button.cancel']}" styleClass="botones apaisado"
+                 reRender="dialogs,configurationForm" action="#{configurationCtrl.closeDialog}" ajaxSingle="true" />
+          </h:panelGrid>
+        </h:form>
+      </rich:modalPanel>
+      
+      <!-- ========================================= -->
+      <!-- DELETE DATA BASE DIALOG -->
+      <!-- ========================================= -->
+      <rich:modalPanel id="deleteDataBaseConfirmDialog" width="395" height="120"
+           resizeable="false" moveable="false" showWhenRendered="true" 
+           rendered="#{configurationCtrl.dataBaseToDelete ne null}">
+        <f:facet name="header">
+          <h:panelGroup>
+            <h:outputText value="#{msg['configuration.option.confirm.title']}"></h:outputText>
+          </h:panelGroup>
+        </f:facet>
+        <h:form id="deleteDataBaseConfirmDialogForm">
+          <p><h:outputText value="Se va a proceder a eliminar la base de datos '#{configurationCtrl.dataBaseToDelete.alias}' ¿Desea continuar?" /></p>
+          <h:panelGrid columns="2" width="100%" styleClass="alignCenter">
+             <!-- SI -->
+             <a4j:commandButton value="#{msg['dialog.button.yes']}" styleClass="botones apaisado noMargin" 
+                action="#{configurationCtrl.deleteDataBase}" reRender="dialogs,configurationForm" />
+             <!-- NO -->
+             <a4j:commandButton value="#{msg['dialog.button.no']}" styleClass="botones apaisado destacado noMargin"
+                 reRender="dialogs,configurationForm" action="#{configurationCtrl.closeDialog}" />
+          </h:panelGrid>
+        </h:form>
+      </rich:modalPanel>
+      
+      <!-- ========================================= -->
+      <!-- DELETE SCHEMA DIALOG -->
+      <!-- ========================================= -->
+      <rich:modalPanel id="deleteSchemaConfirmDialog" width="395" height="120"
+           resizeable="false" moveable="false" showWhenRendered="true" 
+           rendered="#{configurationCtrl.schemaToDelete ne null}">
+        <f:facet name="header">
+          <h:panelGroup>
+            <h:outputText value="#{msg['configuration.option.confirm.title']}"></h:outputText>
+          </h:panelGroup>
+        </f:facet>
+        <h:form id="deleteSchemaConfirmDialogForm">
+          <p><h:outputText value="Se va a proceder a eliminar el esquema '#{configurationCtrl.schemaToDelete.schemaEntity.name}' ¿Desea continuar?" /></p>
+          <h:panelGrid columns="2" width="100%" styleClass="alignCenter">
+             <!-- SI -->
+             <a4j:commandButton value="#{msg['dialog.button.yes']}" styleClass="botones apaisado" 
+                action="#{configurationCtrl.deleteSchema}" reRender="dialogs,configurationForm" oncomplete="" />
+             <!-- NO -->
+             <a4j:commandButton value="#{msg['dialog.button.no']}" styleClass="botones apaisado destacado"
+                 reRender="dialogs,configurationForm" action="#{configurationCtrl.closeDialog}" />
+          </h:panelGrid>
+        </h:form>
+      </rich:modalPanel>
+    </s:div>
+    <script type="text/javascript">
+       var addPlaceHolder = function(htmlElem) {
+           htmlElem.placeholder = 'jdbc:postgresql://&lt;host&gt;:&lt;puerto&gt;/&lt;basedatos&gt;';
+       };
+    </script>
+  </ui:define>
+</ui:composition>
+

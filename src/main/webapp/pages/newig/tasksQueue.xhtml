@@ -1,0 +1,184 @@
+<ui:composition template="/template/master-new.xhtml"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:rich="http://richfaces.org/rich"
+  xmlns:s="http://jboss.com/products/seam/taglib">
+
+  <ui:define name="content">
+    <h:form id="taskQueueForm">
+        <s:validateAll>
+        <!-- ========================================= -->
+        <!-- GENERIC ERRORS -->
+        <!-- ========================================= -->
+        <a4j:outputPanel id="genericErrorMessagePanel">
+          <h:messages globalOnly="true" styleClass="error" />
+        </a4j:outputPanel>
+        
+        
+      <!-- ENCABEZADO -->
+        <table>
+          <tr>
+            <td><h1><h:outputText value="#{msg['ig.tasksqueue.title']}" /></h1></td>
+          </tr>
+        </table>
+        
+        <s:div id="tasksQueuePanel">
+          <!-- RUNNING TASKS QUEUE -->
+          <h3><h:outputText value="#{msg['ig.tasksqueue.running']}" /></h3>
+          <h:panelGrid columns="1" width="100%" styleClass="fieldset">
+              <s:div rendered="#{empty tasksQueueController.runningTasks}">
+                  <h:outputText value="#{msg['ig.tasksqueue.running.empty']}" styleClass="msg"/>
+              </s:div>
+              <rich:dataList var="taskProgress" value="#{tasksQueueController.runningTasks}"
+                styleClass="marginAuto" rows="0">
+                <!-- TICKET -->
+                <a4j:commandLink action="#{tasksQueueController.showTaskDetails(taskProgress)}" 
+                   value="#{taskProgress.ticket}" id="taskDetailsLink" reRender="taskDetailAjaxPanel">
+                </a4j:commandLink>
+                <!-- PROGRESS BAR -->
+                <s:div styleClass="alignCenter">
+                  <div class="progress" style="float: right;">
+                    <div
+                      class="progress-bar #{(taskProgress.status == 'ERROR')?'progress-bar-danger':((taskProgress.status == 'FINISHED')?'progress-bar-success':'')}"
+                      role="progressbar" aria-valuenow="#{taskProgress.progress}"
+                      aria-valuemin="0" aria-valuemax="100"
+                      style="width: #{taskProgress.progress}%">
+                      <h:outputText value="#{taskProgress.progress}% Completo"
+                        styleClass="sr-only" />
+                    </div>
+                  </div>
+                </s:div>
+              </rich:dataList>
+          </h:panelGrid>
+          <rich:spacer height="30"/>
+          <!-- PAUSED TASKS QUEUE -->
+          <h3><h:outputText value="#{msg['ig.tasksqueue.paused']}" /></h3>
+          <h:panelGrid columns="1" width="100%" styleClass="fieldset">
+              <s:div rendered="#{empty tasksQueueController.pausedTasks}">
+                  <h:outputText value="#{msg['ig.tasksqueue.paused.empty']}" styleClass="msg"/>
+              </s:div>
+              <rich:dataList var="taskProgress" value="#{tasksQueueController.pausedTasks}"
+                styleClass="marginAuto" rows="0">
+                <!-- TICKET -->
+                <a4j:commandLink action="#{tasksQueueController.showTaskDetails(taskProgress)}" 
+                   value="#{taskProgress.ticket}" id="taskDetailsLink" reRender="taskDetailAjaxPanel">
+                </a4j:commandLink>
+              </rich:dataList>
+          </h:panelGrid>
+          <rich:spacer height="30"/>
+          <!-- FAILED TASKS QUEUE -->
+          <h3><h:outputText value="#{msg['ig.tasksqueue.failed']}" /></h3>
+          <h:panelGrid columns="1" width="100%" styleClass="fieldset">
+              <s:div rendered="#{empty tasksQueueController.failedTasks}">
+                  <h:outputText value="#{msg['ig.tasksqueue.failed.empty']}" styleClass="msg"/>
+              </s:div>
+              <rich:dataList var="taskProgress" value="#{tasksQueueController.failedTasks}"
+                styleClass="marginAuto" rows="0">
+                <!-- TICKET -->
+                <a4j:commandLink action="#{tasksQueueController.showTaskDetails(taskProgress)}" 
+                   value="#{taskProgress.ticket}" id="failedTaskDetailsLink" reRender="taskDetailAjaxPanel">
+                </a4j:commandLink>
+              </rich:dataList>
+          </h:panelGrid>
+          <!-- TASKS QUEUE POLL -->
+          <a4j:poll id="taskQueuePoll" enabled="#{(not empty tasksQueueController.runningTasks) and (tasksQueueController.selectedTask eq null)}" interval="#{newgicontroller.updatingInterval}"
+            reRender="taskQueuePoll,tasksQueuePanel" />
+        </s:div>
+        
+        <!-- TASK DEATIL MODAL PANEL -->
+        <a4j:outputPanel id="taskDetailAjaxPanel">
+              <rich:modalPanel id="taskDetailsPanel" autosized="true" minWidth="700"
+                 resizeable="false" moveable="false"
+                 rendered="#{tasksQueueController.selectedTask ne null}"
+                 showWhenRendered="true">
+                  <f:facet name="header">
+                      <h:panelGroup>
+                          <h:outputText value="#{msg['ig.tasksqueue.panel_title']} #{tasksQueueController.selectedTask.ticket}"></h:outputText>
+                      </h:panelGroup>
+                  </f:facet>
+                  <f:facet name="controls">
+                      <h:panelGroup>
+                         <a4j:commandButton value="" styleClass="btn-cerrar"
+                              action="#{tasksQueueController.setSelectedTask(null)}" reRender="taskDetailAjaxPanel,tasksQueuePanel" />
+                      </h:panelGroup>
+                  </f:facet>
+                  <h:panelGrid columns="1" width="100%" styleClass="mp">
+                      <h:outputText value="#{msg['ig.taskqueue.detail.data']}" styleClass="titulo3"/>
+                      <h:panelGrid columns="2" styleClass="fieldset">
+                          <h:outputText value="#{msg['ig.taskqueue.detail.ticket']}" /><h:outputText value="#{tasksQueueController.selectedTask.ticket}" />
+                          <h:outputText value="#{msg['ig.taskqueue.detail.updating']}" /><h:outputText value="#{tasksQueueController.selectedTask.update}" />
+                      </h:panelGrid>
+                      <h:outputText value="#{msg['ig.taskqueue.detail.status_title']}" styleClass="titulo3"/>
+                      <h:panelGrid columns="2" styleClass="fieldset">
+                          <h:outputText value="#{msg['ig.taskqueue.detail.status']}" /><h:outputText value="#{tasksQueueController.selectedTask.state.status}" />
+                          <h:outputText value="#{msg['ig.taskqueue.detail.readlines']}" /><h:outputText value="#{tasksQueueController.selectedTask.state.readLines}" />
+                          <h:outputText value="#{msg['ig.taskqueue.detail.description']}" /><h:outputText value="#{tasksQueueController.selectedTask.state.description}" />
+                      </h:panelGrid>
+                      <h:outputText value="#{msg['ig.taskqueue.detail.source']}" styleClass="titulo3"/>
+                      <h:panelGrid columns="2" styleClass="fieldset">
+                          <h:outputText value="#{msg['ig.taskqueue.detail.source.name']}" /><h:outputText value="#{tasksQueueController.selectedTask.source.name}" />
+                          <h:outputText value="#{msg['ig.taskqueue.detail.source.size']}" /><h:outputText value="#{tasksQueueController.selectedTask.source.formattedSize}" />
+                          <h:outputText value="#{msg['ig.taskqueue.detail.source.contenttype']}" /><h:outputText value="#{tasksQueueController.selectedTask.source.contentType}" />
+                          <h:outputText value="#{msg['ig.taskqueue.detail.source.type']}" /><h:outputText value="#{tasksQueueController.selectedTask.source.type}" />
+                          <h:outputText value="#{msg['ig.taskqueue.detail.source.divider']}" /><h:outputText value="#{tasksQueueController.selectedTask.source.divider}" />
+                          <h:outputText value="#{msg['ig.taskqueue.detail.source.url']}" /><h:outputText value="#{tasksQueueController.selectedTask.source.url}" />
+                          <h:outputText value="#{msg['ig.taskqueue.detail.source.urlalias']}" /><h:outputText value="#{tasksQueueController.selectedTask.source.alias}" />
+                      </h:panelGrid>
+                      <h:outputText value="#{msg['ig.taskqueue.detail.target']}" styleClass="titulo3"/>
+                      <h:panelGrid columns="2" styleClass="fieldset">
+                         <h:outputText value="#{msg['ig.taskqueue.detail.target.bd']}" /><h:outputText value="#{tasksQueueController.selectedTask.table.schema.dataBase.connectionUrl}" />
+                         <h:outputText value="#{msg['ig.taskqueue.detail.target.schema']}" /><h:outputText value="#{tasksQueueController.selectedTask.table.schema.name}" />
+                         <h:outputText value="#{msg['ig.taskqueue.detail.target.table']}" /><h:outputText value="#{tasksQueueController.selectedTask.table.name}" />
+                      </h:panelGrid>
+                      <!-- PROGRESS BAR -->
+                      <s:div styleClass="alignCenter" style="margin-top: 10px;">
+                        <div class="progress" style="float: right;margin-bottom: 0px;">
+                          <div class="progress-bar #{(tasksQueueController.selectedTask.state.status == 'ERROR')?'progress-bar-danger':((tasksQueueController.selectedTask.state.status == 'FINISHED')?'progress-bar-success':'')}"
+                            role="progressbar" aria-valuenow="#{tasksQueueController.selectedTask.state.progress}" aria-valuemin="0" aria-valuemax="100" style="width: #{tasksQueueController.selectedTask.state.progress}%">
+                            <h:outputText value="#{tasksQueueController.selectedTask.state.progress}% Completo" styleClass="sr-only" />
+                          </div>
+                        </div>
+                      </s:div>
+                      <!-- NEW TABLE ERROR MESSAGE -->
+                      <h:panelGrid columns="1" width="100%"
+                         rendered="#{(not tasksQueueController.selectedTask.update) and (tasksQueueController.selectedTask.state.status == 'ERROR')}">
+                          <h:outputText value="Ha ocurrido un error durante la ejecución de esta tarea. ¿Desea borrar la tabla y su contenido?" />
+                          <h:panelGrid columns="2" width="100%" styleClass="alignCenter">
+                             <!-- YES -->
+                             <a4j:commandButton value="#{msg['dialog.button.yes']}" styleClass="botones apaisado" 
+                                action="#{tasksQueueController.removeNewTable()}"
+                                reRender="genericErrorMessagePanel,taskQueueForm" />
+                             <!-- NO -->
+                             <a4j:commandButton value="#{msg['dialog.button.no']}" styleClass="botones apaisado destacado"
+                                action="#{tasksQueueController.taskChecked()}"
+                                reRender="genericErrorMessagePanel,taskQueueForm" />
+                          </h:panelGrid>
+                      </h:panelGrid>
+                      <!-- NEW TABLE ERROR MESSAGE -->
+                      <h:panelGrid columns="1" width="100%"
+                         rendered="#{tasksQueueController.selectedTask.update and (tasksQueueController.selectedTask.state.status == 'ERROR')}">
+                          <h:outputText value="Ha ocurrido un error durante la ejecución de esta tarea. ¿Desea eliminar los nuevos datos y restaurar los anteriores?" />
+                          <h:panelGrid columns="2" width="100%" styleClass="alignCenter">
+                             <!-- YES -->
+                             <a4j:commandButton value="#{msg['dialog.button.yes']}" styleClass="botones apaisado" 
+                                action="#{tasksQueueController.restoreBackup()}"
+                                reRender="genericErrorMessagePanel,taskQueueForm" />
+                             <!-- NO -->
+                             <a4j:commandButton value="#{msg['dialog.button.no']}" styleClass="botones apaisado destacado"
+                                action="#{tasksQueueController.taskChecked()}"
+                                reRender="genericErrorMessagePanel,taskQueueForm" />
+                          </h:panelGrid>
+                      </h:panelGrid>
+                  </h:panelGrid>
+              </rich:modalPanel>
+              <!-- TASK DETAILS POLL -->
+              <a4j:poll id="taskDetailsPoll" enabled="#{(tasksQueueController.selectedTask ne null) and (tasksQueueController.selectedTask.state.status == 'RUNNING')}" interval="#{newgicontroller.updatingInterval}"
+                 reRender="taskDetailsPoll,taskDetailAjaxPanel" />
+        </a4j:outputPanel>
+        </s:validateAll>
+    </h:form>
+  </ui:define>
+</ui:composition>

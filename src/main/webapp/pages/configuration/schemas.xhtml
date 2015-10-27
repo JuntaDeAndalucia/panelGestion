@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<ui:component xmlns="http://www.w3.org/1999/xhtml" xml:lang="es"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:rich="http://richfaces.org/rich"
+  xmlns:s="http://jboss.com/products/seam/taglib">
+
+  <h:panelGrid columns="1" width="100%">
+     <rich:dataTable var="schema" width="100%" value="#{configurationCtrl.schemas}" rendered="#{not empty configurationCtrl.schemas}"
+        styleClass="marginAuto alignCenter" rowClasses="fila1, fila2">
+        <!-- ID -->
+        <h:column>
+          <f:facet name="header">
+            <h:outputText value="#{msg['configuration.schema.id']}" />
+          </f:facet>
+          <h:outputText value="#{schema.schemaEntity.id}" />
+        </h:column>
+        <!-- ALIAS -->
+        <h:column>
+          <f:facet name="header">
+            <h:outputText value="#{msg['configuration.schema.alias']}" />
+          </f:facet>
+          <h:outputText value="#{schema.alias}" />
+        </h:column>
+        <!-- EDIT -->
+        <h:column>
+          <f:facet name="header">
+            <h:outputText value="#{msg['configuration.schema.edit']}" />
+          </f:facet>
+          <a4j:commandButton styleClass="edit" ajaxSingle="true"
+            reRender="databasesPanel,dialogs" action="#{configurationCtrl.setSchema(schema)}"
+            title="#{msg['configuration.schema.edit.title']}" />
+        </h:column>
+        <!-- REMOVE -->
+        <h:column>
+          <f:facet name="header">
+            <h:outputText value="#{msg['configuration.database.delete']}" />
+          </f:facet>
+          <a4j:commandButton styleClass="remove" ajaxSingle="true"
+            reRender="databasesPanel,dialogs" action="#{configurationCtrl.setSchemaToDelete(schema)}"
+            title="#{msg['configuration.schema.delete.title']}" />
+        </h:column>
+      </rich:dataTable>
+  </h:panelGrid>
+</ui:component>

@@ -1,0 +1,152 @@
+<ui:composition template="/template/master-new.xhtml"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:rich="http://richfaces.org/rich"
+  xmlns:s="http://jboss.com/products/seam/taglib">
+
+  <ui:define name="content">
+    <h:form id="newigform" enctype="multipart/form-data">
+      <s:validateAll>
+      
+        <!-- ========================================= -->
+        <!-- GENERIC ERRORS -->
+        <!-- ========================================= -->
+        <a4j:outputPanel id="genericErrorMessage" >
+          <h:messages globalOnly="true" styleClass="error" />
+          <h:outputText value="#{newgicontroller.localFileError}" styleClass="error" rendered="#{newgicontroller.localFileError ne null}"/>
+          <h:panelGrid columns="2">
+            <h:outputText value="ATENCIÓN: La tabla seleccionada está siendo usada por la tarea" styleClass="error" rendered="#{newgicontroller.runningTaskTableTicket ne null}"/> 
+            <h:commandLink id="goTaskButtonId" action="goViewTask" value="#{newgicontroller.runningTaskTableTicket}" rendered="#{newgicontroller.runningTaskTableTicket ne null}">
+                <s:conversationId/>
+                <s:conversationPropagation type="nested"/>
+                <img src="#{facesContext.externalContext.requestContextPath}/static/images/template/next.png" />
+            </h:commandLink>
+          </h:panelGrid>
+        </a4j:outputPanel>
+        <h:panelGrid columns="2" width="99%" columnClasses="main,tasksQueueColumn">
+          <s:div>
+            <!-- ========================================= -->
+            <!-- ENCABEZADO -->
+            <!-- ========================================= -->
+            <table width="100%">
+              <tr>
+                <td style="float: left;"><h1><h:outputText value="#{msg['ig.new.title']}" /></h1></td>
+                <td style="float: right;">
+                  <a4j:commandButton id="clearFormBtn"
+                      title="#{msg['form.clear']}"
+                      action="#{newgicontroller.reset()}"
+                      reRender="newigform"
+                      ajaxSingle="true"
+                      styleClass="btn-clear">
+                  </a4j:commandButton>
+                   <h:commandButton
+                    title="#{msg['ig.new.show_task_queue']}"
+                    action="goTasksQueue" styleClass="btn-tasksqueue">
+                    <s:conversationId />
+                    <s:conversationPropagation type="nested"/>
+                  </h:commandButton>
+                </td>
+              </tr>
+            </table>
+
+            <!-- ========================================= -->
+            <!-- TARGET -->
+            <!-- ========================================= -->
+            <a4j:outputPanel id="targetPanel">
+              <h3><h:outputText value="#{msg['ig.new.dest']}" /></h3>
+              <h:panelGrid columns="1" styleClass="fieldset alignCenter" style="margin-top:0px;margin-bottom: 0px;">
+                <ui:include src="newig/target.xhtml" />
+              </h:panelGrid>
+            </a4j:outputPanel>
+
+            <rich:spacer height="30" />
+            
+            <!-- ========================================= -->
+            <!-- SOURCE -->
+            <!-- ========================================= -->
+            <a4j:outputPanel id="sourcePanel">
+                <h3><h:outputText value="#{msg['ig.new.source']}" /></h3>
+                <h:panelGrid columns="1" styleClass="fieldset alignCenter">
+                  <ui:include src="newig/source.xhtml" />
+                </h:panelGrid>
+            </a4j:outputPanel>
+
+            <!-- ========================================= -->
+            <!-- READ BUTTON -->
+            <!-- ========================================= -->
+            <a4j:outputPanel id="readButtonPanel">
+              <s:div rendered="#{newgicontroller.readFilePhase}"
+                styleClass="alignCenter">
+                <rich:spacer height="30" />
+                  <a4j:commandButton value="#{msg['ig.new.head.read']}" id="readButtonId"
+                    styleClass="botones" reRender="fileConfigurationPanel,genericErrorMessage,readButtonPanel,loadButtonPanel"
+                    action="#{newgicontroller.initTask}"
+                    disabled="#{((newgicontroller.taskvo.localSourceData eq null) and (newgicontroller.taskvo.taskEntity.source.url eq null)) or ((not newgicontroller.validTable) and newgicontroller.taskvo.taskEntity.update) or (newgicontroller.uploadingFilePhase)}"
+                    oncomplete="#{rich:component('readingHeadMessage')}.hide()">
+                     <rich:componentControl for="readingHeadMessage" attachTo="readButtonId" operation="show" event="onclick" />
+                </a4j:commandButton>
+               <rich:message for="tablesSelect" styleClass="error" />
+              </s:div>
+            </a4j:outputPanel>
+
+            <!-- ========================================= -->
+            <!-- CONFIGURATION -->
+            <!-- ========================================= -->
+            <a4j:outputPanel id="fileConfigurationPanel">
+                <s:div rendered="#{newgicontroller.processFilePhase}">
+                    <h3><h:outputText value="#{msg['ig.new.configuration']}" /></h3>
+                </s:div>
+                <h:panelGrid columns="1" styleClass="fieldset alignCenter" width="100%" rendered="#{newgicontroller.processFilePhase}">
+                    <ui:include src="newig/configuration.xhtml" />
+                </h:panelGrid>
+            </a4j:outputPanel>
+            
+            <!-- ========================================= -->
+            <!-- LOAD BUTTON -->
+            <!-- ========================================= -->
+            <a4j:outputPanel id="loadButtonPanel">
+              <s:div id="loadButton" style="text-align: center;" rendered="#{newgicontroller.processFilePhase}">
+                <a4j:commandButton value="#{msg['ig.new.start_task']}"
+                  action="#{newgicontroller.runTask}"
+                  disabled="#{(newgicontroller.taskvo.taskEntity.table eq null) or newgicontroller.uploadingFilePhase}"
+                  reRender="progressBarPanel,genericErrorMessage,readButtonPanel,loadButtonPanel"
+                  styleClass="botones" />
+                  <h:messages styleClass="error" />
+              </s:div>
+            </a4j:outputPanel>
+            
+            <!-- ========================================= -->
+            <!-- PROGRESS BAR -->
+            <!-- ========================================= -->
+            <a4j:outputPanel id="progressBarPanel">
+              <s:div rendered="#{newgicontroller.uploadingFilePhase}">
+                <h3><h:outputText value="#{msg['ig.new.progress']}" /></h3>
+                <h:panelGrid columns="1" styleClass="alignCenter" width="100%">
+                    <ui:include src="newig/progressBar.xhtml" />
+                </h:panelGrid>
+              </s:div>
+            </a4j:outputPanel>
+          </s:div>
+        </h:panelGrid>
+        
+        <!-- ========================================= -->
+        <!-- READING HEAD MODAL PANEL -->
+        <!-- ========================================= -->
+        <a4j:outputPanel id="readHeadModalPanel">
+          <rich:modalPanel id="readingHeadMessage" height="50" width="310" 
+             resizeable="false" moveable="false" showWhenRendered="false">
+              <f:facet name="header">
+                  <h:outputText value="#{msg['ig.new.reading_head_msg.title']}" />
+              </f:facet>
+              <f:facet name="controls"></f:facet>
+              <h:outputText value="#{msg['ig.new.reading_head_msg.content']}" />
+          </rich:modalPanel>
+        </a4j:outputPanel>
+        
+     </s:validateAll>
+    </h:form>
+  </ui:define>
+</ui:composition>

@@ -1,0 +1,18 @@
+<ui:composition template="/template/master.xhtml"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:s="http://jboss.com/products/seam/taglib">
+  <ui:param name="initPage" value="true" />
+  <ui:define name="content">
+    <div class="main-error"></div>
+    <div class="main-error icon"></div>
+    <div class="main-error-message">
+      <span class="text-error">Ocurrió un error inesperado en la
+        aplicación. Si el error persiste por favor contacte con su
+        administrador.</span>
+    </div>
+  </ui:define>
+</ui:composition>

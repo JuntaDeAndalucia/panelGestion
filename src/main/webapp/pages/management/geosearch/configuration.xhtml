@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<ui:component xmlns="http://www.w3.org/1999/xhtml" xml:lang="es"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:rich="http://richfaces.org/rich"
+  xmlns:s="http://jboss.com/products/seam/taglib"
+  xmlns:utils="http://panel-sigc.juntadenadalucia.es/utils">
+
+  <h:panelGrid columns="1" width="100%">
+     <a4j:outputPanel id="configurationPanel" width="100%">
+        <!-- ======================================================= -->
+        <!-- COLUMNS FOR NEW TABLE -->
+        <!-- ======================================================= -->
+        <rich:dataTable var="field" value="#{geosearchController.tables[geosearchController.tableIndex].fields}" width="100%"
+           styleClass="marginAuto" style="text-align: center;" rowClasses="fila1, fila2">
+           <f:facet name="header">
+              <rich:columnGroup>
+                <rich:column colspan="8" rendered="#{geosearchController.tables[geosearchController.tableIndex].table ne null}"
+                styleClass="tableNameHead">
+                    <h:outputText value="#{geosearchController.tables[geosearchController.tableIndex].table.name}" />
+                </rich:column>
+                <rich:column breakBefore="true">
+                   <h:outputText value="#{msg['geosearch.option.head.column']}" />
+                </rich:column>
+                <rich:column>
+                   <h:outputText value="#{msg['geosearch.option.head.name']}" />
+                </rich:column>
+                <rich:column>
+                   <h:outputText value="#{msg['geosearch.option.head.type']}" />
+                </rich:column>
+                <rich:column>
+                   <h:outputText value="#{msg['geosearch.option.head.indexed']}" />
+                </rich:column>
+                <rich:column>
+                   <h:outputText value="#{msg['geosearch.option.head.stored']}" />
+                </rich:column>
+                <ui:remove>
+                  <rich:column>
+                     <h:outputText value="#{msg['geosearch.option.head.multivaluated']}" />
+                  </rich:column>
+                </ui:remove>
+                <rich:column>
+                   <h:outputText value="#{msg['geosearch.option.head.copyToText']}" />
+                </rich:column>
+                <rich:column>
+                   <h:outputText value="#{msg['geosearch.option.head.boost']}" />
+                </rich:column>
+             </rich:columnGroup>
+          </f:facet>
+          <rich:column>
+             <h:outputText value="#{field.nameOnTable}" />
+          </rich:column>
+          <rich:column>
+              <h:inputText value="#{field.name}">
+                <a4j:support event="onblur" action="#{geosearchController.overrideDuplicatedField(field)}" reRender="configurationPanel"/>
+              </h:inputText>
+              <br/>
+              <h:outputText value="#{field.error}" styleClass="warning" rendered="#{field.error ne null}"/>
+          </rich:column>
+          <rich:column>
+              <h:selectOneMenu value="#{field.type}" disabled="#{field.inSchema}">
+                  <f:selectItem itemLabel="#{msg['select.empty']}" itemValue="#{null}" />
+                  <s:selectItems value="#{geosearchController.geosearchTypes}" var="type" label="#{type}" itemValue="#{type}"/>
+                  <a4j:support event="onchange" action="#{geosearchController.overrideDuplicatedField(field)}" reRender="configurationPanel" ajaxSingle="true"/>
+              </h:selectOneMenu>
+          </rich:column>
+          <rich:column>
+              <h:selectBooleanCheckbox value="#{field.indexed}" disabled="#{field.inSchema}">
+                 <a4j:support action="#{geosearchController.overrideDuplicatedField(field)}" reRender="configurationPanel" event="onclick"/>
+              </h:selectBooleanCheckbox>
+          </rich:column>
+          <rich:column>
+              <h:selectBooleanCheckbox value="#{field.stored}" disabled="#{field.inSchema}">
+                 <a4j:support action="#{geosearchController.overrideDuplicatedField(field)}" reRender="configurationPanel" event="onclick"/>
+              </h:selectBooleanCheckbox>
+          </rich:column>
+          <ui:remove>
+            <rich:column>
+              <h:selectBooleanCheckbox value="#{field.multivaluated}" id="columnMultivalued" disabled="#{field.inSchema}">
+                 <a4j:support action="#{geosearchController.overrideDuplicatedField(field)}" reRender="configurationPanel" event="onclick"/>
+              </h:selectBooleanCheckbox>
+            </rich:column>
+          </ui:remove>
+          <rich:column>
+              <h:selectBooleanCheckbox value="#{field.copyToText}" disabled="#{(not field.indexed) or field.inSchema}">
+                 <a4j:support action="#{geosearchController.overrideDuplicatedField(field)}" reRender="configurationPanel" event="onclick"/>
+              </h:selectBooleanCheckbox>
+          </rich:column>
+          <rich:column>
+              <h:inputText value="#{field.boost}" disabled="#{(not field.copyToText) or field.inSchema}" style="width: 30px;">
+                 <a4j:support event="onblur" action="#{geosearchController.overrideDuplicatedField(field)}" reRender="configurationPanel"/>
+              </h:inputText>
+          </rich:column>
+        </rich:dataTable>
+        <!-- ======================================================= -->
+        <!-- KEYWORDS -->
+        <!-- ======================================================= -->
+        <h:panelGrid columns="2" rendered="#{(geosearchController.core ne null) and (wscontroller.table ne null)}" styleClass="keywordsTable">
+           <h:outputText value="#{msg['geosearch.table.keywords']}:" />
+           <h:inputText id="tableKeywords" value="#{geosearchController.tables[geosearchController.tableIndex].keywords}" style="width: 300px;">
+              <a4j:support event="onblur" reRender="configurationPanel"/>
+           </h:inputText>
+        </h:panelGrid>
+        <!-- ======================================================= -->
+        <!-- TABLES BUTTONS -->
+        <!-- ======================================================= -->
+        <h:panelGrid columns="4" rendered="#{(geosearchController.core ne null) and (wscontroller.table ne null)}">
+           <a4j:commandButton action="#{geosearchController.setTableIndex(geosearchController.tableIndex - 1)}" reRender="dataBasePanel,schemaPanel,tablePanel,configurationPanel"
+                  styleClass="botones" title="#{msg['geosearch.table.previous']}" value="&#171;" disabled="#{geosearchController.tableIndex eq 0}" />
+           <h:panelGrid columns="#{geosearchController.tables.size()}">
+             <a4j:repeat value="#{geosearchController.tables}" var="table" rowKeyVar="i">
+                 <a4j:commandButton action="#{geosearchController.setTableIndex(i)}" reRender="dataBasePanel,schemaPanel,tablePanel,configurationPanel"
+                  styleClass="botones #{(geosearchController.tableIndex eq i)?'destacado':''} left" title="#{msg['geosearch.table.select']}" value="#{geosearchController.tables[i].table.name}"
+                  rendered="#{geosearchController.tables[i].table ne null}"/>
+                <a4j:commandButton action="#{geosearchController.removeTable(i)}" reRender="dataBasePanel,schemaPanel,tablePanel,configurationPanel"
+                  styleClass="botones right #{(geosearchController.tableIndex eq i)?'destacado':''}" title="#{msg['geosearch.table.remove']}" value="X" style="#{(geosearchController.tableIndex eq i)?'border-color: #888;':''}"
+                  rendered="#{geosearchController.tables[i].table ne null}" disabled="#{geosearchController.tables.size() eq 1}"/>
+             </a4j:repeat>
+           </h:panelGrid>
+           <a4j:commandButton action="#{geosearchController.setTableIndex(geosearchController.tableIndex + 1)}" reRender="dataBasePanel,schemaPanel,tablePanel,configurationPanel"
+                  styleClass="botones" title="#{msg['geosearch.table.next']}" value="&#187;" disabled="#{geosearchController.tableIndex eq (geosearchController.tables.size() - 1)}" />
+           <a4j:commandButton id="addNewTableId" action="#{geosearchController.addTable()}" reRender="dataBasePanel,schemaPanel,tablePanel,configurationPanel,coreSelectPanel,selectTableAjaxPanel"
+                  styleClass="btn-nuevo" title="#{msg['geosearch.table.add']}" disabled="#{(geosearchController.tables[geosearchController.tableIndex].table eq null) or (geosearchController.tableIndex lt (geosearchController.tables.size() - 1))}" >
+                  <rich:componentControl for="selectTablePanel" attachTo="addNewTableId" operation="show" event="onclick"/>
+           </a4j:commandButton>
+        </h:panelGrid>
+        
+        <!-- ======================================================= -->
+        <!-- CONFIGURATION BUTTONS -->
+        <!-- ======================================================= -->
+        <s:div styleClass="alignCenter">
+           <h:commandButton value="#{msg['geosearch.configuration.download']}" action="#{geosearchController.downloadConfig}"
+                styleClass="botones" disabled="#{(geosearchController.tables[0].table eq null) or geosearchController.newCore}" rendered="#{geosearchController.core ne null}"/>
+        </s:div>
+        
+        <s:div>
+           <h:messages errorClass="error" rendered="#{not geosearchController.newCore}"/>
+        </s:div>
+     </a4j:outputPanel>
+  </h:panelGrid>
+</ui:component>

@@ -1,0 +1,230 @@
+<ui:composition template="/template/master.xhtml"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:rich="http://richfaces.org/rich"
+  xmlns:s="http://jboss.com/products/seam/taglib">
+
+  <ui:define name="content">
+    <h:form id="raform">
+      <s:validateAll>
+          <s:div>
+            <!-- ========================================= -->
+            <!-- ENCABEZADO -->
+            <!-- ========================================= -->
+            <table width="100%">
+              <tr>
+                <td style="float: left;"><h1><h:outputText value="#{msg['ra.title']}" /></h1></td>
+                <td style="float: right;">
+                  <a4j:commandButton id="clearFormBtn"
+                      title="#{msg['form.clear']}"
+                      action="#{racontroller.reset()}"
+                      reRender="raform" ajaxSingle="true" styleClass="btn-clear" />
+                </td>
+              </tr>
+            </table>
+            
+            <!-- ========================================= -->
+            <!-- FIRST STEP -->
+            <!-- ========================================= -->
+            <h3><h:outputText value="#{msg['ra.step1.title']}" /></h3>
+            <h:panelGrid columns="1" cellpadding="5" cellspacing="5">
+              <h:outputText value="#{msg['ra.step1.description']}" />
+            </h:panelGrid>
+            <h:panelGrid columns="1" cellpadding="5" cellspacing="5" styleClass="centrado">
+              <h:outputLink target="_blank" value="#{msg['ra.layar.url']}">
+                 <h:outputLabel value="#{msg['ra.layar.url']}" styleClass="url" style="width: 80%;"/>
+              </h:outputLink>
+              <h:outputText value="#{msg['ra.step1.note']}" />
+            </h:panelGrid>
+
+            <rich:spacer height="20" />
+            <!-- ========================================= -->
+            <!-- LAYER DATA -->
+            <!-- ========================================= -->
+            <h3><h:outputText value="#{msg['ra.data.title']}" /></h3>
+            <h:panelGrid columns="2" styleClass="layarData" id="layerDataPanel">
+               <!-- NAME -->
+               <h:outputText value="#{msg['ra.layer.name']} (*)" style="width: 100px;"/>
+               <h:panelGroup>
+                  <h:inputText id="layerNameInput" value="#{racontroller.name}" required="true" disabled="#{not wscontroller.selectedTable}"/>
+                  <rich:message for="layerNameInput" styleClass="error" />
+               </h:panelGroup>
+               <!-- TITLE -->
+               <h:outputText value="#{msg['ra.layer.title']}" />
+               <h:selectOneMenu value="#{racontroller.title}" disabled="#{not wscontroller.selectedTable}">
+                 <f:selectItem itemLabel="#{msg['select.empty']}" itemValue="#{null}" />
+                 <s:selectItems value="#{racontroller.fields}" var="field" label="#{field}" itemValue="#{field}" />
+               </h:selectOneMenu>
+               <!-- LINE 2 -->
+               <h:outputText value="#{msg['ra.layer.line2']}" />
+               <h:selectOneMenu value="#{racontroller.line2}" disabled="#{not wscontroller.selectedTable}">
+                 <f:selectItem itemLabel="#{msg['select.empty']}" itemValue="#{null}" />
+                 <s:selectItems value="#{racontroller.fields}" var="field" label="#{field}" itemValue="#{field}" />
+               </h:selectOneMenu>
+               <!-- LINE 3 -->
+               <h:outputText value="#{msg['ra.layer.line3']}" />
+               <h:selectOneMenu value="#{racontroller.line3}" disabled="#{not wscontroller.selectedTable}">
+                 <f:selectItem itemLabel="#{msg['select.empty']}" itemValue="#{null}" />
+                 <s:selectItems value="#{racontroller.fields}" var="field" label="#{field}" itemValue="#{field}" />
+               </h:selectOneMenu>
+               <!-- LINE 4 -->
+               <h:outputText value="#{msg['ra.layer.line4']}" />
+               <h:selectOneMenu value="#{racontroller.line4}" disabled="#{not wscontroller.selectedTable}">
+                 <f:selectItem itemLabel="#{msg['select.empty']}" itemValue="#{null}" />
+                 <s:selectItems value="#{racontroller.fields}" var="field" label="#{field}" itemValue="#{field}" />
+               </h:selectOneMenu>
+               <!-- IMAGE URL -->
+               <h:outputText value="#{msg['ra.layer.imageUrl']}" />
+               <h:selectOneMenu value="#{racontroller.imageUrl}" disabled="#{not wscontroller.selectedTable}">
+                 <f:selectItem itemLabel="#{msg['select.empty']}" itemValue="#{null}" />
+                 <s:selectItems value="#{racontroller.fields}" var="field" label="#{field}" itemValue="#{field}" />
+               </h:selectOneMenu>
+               <!-- ATTRIBUTION -->
+               <h:outputText value="#{msg['ra.layer.attribution']}" />
+               <h:panelGroup>
+                 <h:selectOneMenu value="#{racontroller.attribution}" 
+                   disabled="#{not wscontroller.selectedTable}" rendered="#{not racontroller.newAttribution}">
+                   <f:selectItem itemLabel="#{msg['select.empty']}" itemValue="#{null}" />
+                   <s:selectItems value="#{racontroller.fields}" var="field" label="#{field}" itemValue="#{field}" />
+                 </h:selectOneMenu>
+                 <h:inputText value="#{racontroller.attribution}" rendered="#{racontroller.newAttribution}"/>
+                 <a4j:commandButton reRender="layerDataPanel" action="#{racontroller.setNewAttribution(!racontroller.newAttribution)}" immediate="true"
+                    styleClass="#{(racontroller.newAttribution)?'btn-combo':'btn-nuevo'}"
+                    rendered="#{wscontroller.selectedTable}"
+                    title="#{(racontroller.newAttribution)?msg['ra.attribution.select']:msg['ra.attribution.new']}" />
+               </h:panelGroup>
+            </h:panelGrid>
+             <!-- ACTIONS -->
+             <rich:dataList var="i" value="#{racontroller.availableActionsIndexes}" id="actionsList" styleClass="actionsList">
+              <h:panelGrid columns="3" styleClass="layarData" id="layerDataPanel">
+                 <!-- text -->
+                 <h:outputText value="#{msg['ra.layer.actions']} #{i + 1}" />
+                 <h:selectOneMenu value="#{racontroller.selectedActions.get(i).field}" disabled="#{not wscontroller.selectedTable}">
+                   <f:selectItem itemLabel="#{msg['select.empty']}" itemValue="#{null}" />
+                   <s:selectItems value="#{racontroller.fields}" var="field" label="#{field}" itemValue="#{field}" />
+                   <a4j:support event="onchange" reRender="actionsList" ajaxSingle="true" />
+                 </h:selectOneMenu>
+                 <h:panelGroup>
+                   <h:inputText value="#{racontroller.selectedActions.get(i).label}" rendered="#{racontroller.selectedActions.get(i).field ne null}"/>
+                   <a4j:commandButton reRender="actionsList" action="#{racontroller.newAvailableAction()}" 
+                      styleClass="btn-nuevo" rendered="#{(racontroller.selectedActions.get(i).field ne null) and (i eq (racontroller.selectedActions.size() - 1))}" title="#{msg['ra.action.new']}" />
+                </h:panelGroup>
+              </h:panelGrid>
+             </rich:dataList>
+            
+            <!-- ========================================= -->
+            <!-- PUBLISH BUTTON -->
+            <!-- ========================================= -->
+            <a4j:outputPanel id="publishServiceButtonPanel">
+              <s:div styleClass="alignCenter">
+                  <rich:spacer height="30" />
+                  <a4j:commandButton value="#{msg['ra.publish']}" id="publishServiceButtonId"
+                    styleClass="botones" action="#{racontroller.publishService(false)}"
+                    reRender="genericErrorMessagePanel,layerDataPanel,validationPanel,overrideFilePanel,xmlModalPanel"
+                    disabled="#{not wscontroller.selectedTable}" />
+              </s:div>
+            </a4j:outputPanel>
+            
+            <!-- ========================================= -->
+            <!-- VALIDATION -->
+            <!-- ========================================= -->
+            <a4j:outputPanel id="validationPanel">
+            
+              <!-- GENERIC ERRORS -->
+              <a4j:outputPanel id="genericErrorMessagePanel">
+                <h:messages globalOnly="true" errorClass="error" fatalClass="error" infoClass="success" />
+              </a4j:outputPanel>
+            
+              <!-- VALIDATION TABLE -->
+              <h:panelGrid columns="3" width="80%" 
+                 styleClass="layarValidation centrado" rowClasses="header,normal,normal" rendered="#{racontroller.publishedService}">
+                 <h:outputText value="#{msg['ra.step3.service.url']}" />
+                 <h:outputText value="#{msg['ra.step3.service.name']}" />
+                 <h:outputText value="#{msg['ra.step3.service.check']}" />
+                 <!-- JARA -->
+                 <h:outputText value="#{msg['ra.step3.test.url']}" />
+                 <h:outputText value="#{racontroller.name}" />
+                 <h:outputLink target="_blank" value="#{racontroller.jaraUrl}">
+                    <h:outputText value="Ir" />
+                 </h:outputLink>
+                 <!-- XML -->
+                 <h:outputText value="XML Configuración" />
+                 <h:outputText value="#{racontroller.name}" />
+                 <h:outputLink value="#" id="xmlModalPanelSeeOpenLink">
+                   <h:outputText value="Ver" />
+                   <rich:componentControl for="xmlModalPanel" attachTo="xmlModalPanelSeeOpenLink"
+                     operation="show" event="onclick"/>
+                 </h:outputLink>
+              </h:panelGrid>
+              
+              <rich:spacer height="30" />
+              
+              <!-- EDIT LAYER ON LAYAR -->
+              <s:div rendered="#{racontroller.publishedService}">
+                <h3><h:outputText value="#{msg['ra.step3.title']}" /></h3>
+                <h:panelGrid columns="1" cellpadding="5" cellspacing="5">
+                  <h:outputText value="#{msg['ra.step3.description']}" />
+                </h:panelGrid>
+                <h:panelGrid columns="1" cellpadding="5" cellspacing="5" styleClass="centrado" style="width: 80%;">
+                  <h:outputLink target="_blank" value="#{msg['ra.layar.url']}">
+                     <h:outputLabel value="#{msg['ra.layar.url']}" styleClass="url" style="width: 80%;"/>
+                  </h:outputLink>
+                </h:panelGrid>
+              </s:div>
+            </a4j:outputPanel>
+
+            <!-- ========================================= -->
+            <!-- OVERRITING PANEL -->
+            <!-- ========================================= -->
+            <a4j:outputPanel id="overrideFilePanel">
+              <rich:modalPanel width="375" height="110"
+                 resizeable="false" moveable="false" rendered="#{racontroller.showOverrideDialog}"
+                 showWhenRendered="true">
+                <f:facet name="header">
+                  <h:panelGroup>
+                    <h:outputText value="#{msg['ra.override.title']}"></h:outputText>
+                  </h:panelGroup>
+                </f:facet>
+                <h:outputText value="#{msg['ra.override.description']}" />
+                <h:panelGrid columns="2" width="100%" styleClass="alignCenter">
+                   <!-- YES -->
+                   <a4j:commandButton value="#{msg['dialog.button.yes']}" styleClass="botones apaisado" 
+                      action="#{racontroller.publishService(true)}"
+                      reRender="genericErrorMessagePanel,overrideFilePanel,validationPanel,xmlModalPanel" />
+                   <!-- NO -->
+                   <a4j:commandButton value="#{msg['dialog.button.no']}" styleClass="botones apaisado destacado"
+                      action="#{racontroller.cancelOverritingFile()}"
+                      reRender="genericErrorMessagePanel,overrideFilePanel,validationPane,xmlModalPanell" />
+                </h:panelGrid>
+              </rich:modalPanel>
+            </a4j:outputPanel>
+            
+            <!-- ========================================= -->
+            <!-- XML PANEL -->
+            <!-- ========================================= -->
+             <rich:modalPanel id="xmlModalPanel" autosized="true" style="text-align: left;">
+                <f:facet name="header">
+                    <h:panelGroup>
+                        <h:outputText value="#{racontroller.name}.xml"></h:outputText>
+                    </h:panelGroup>
+                </f:facet>
+                <f:facet name="controls">
+                    <h:panelGroup>
+                        <h:graphicImage value="/static/images/iconos/close_small.gif" styleClass="hidelink"
+                           id="xmlModalPanelHidelink"/>
+                        <rich:componentControl for="xmlModalPanel" attachTo="xmlModalPanelHidelink"
+                           operation="hide" event="onclick"/>
+                    </h:panelGroup>
+                </f:facet>
+            <pre>
+              <code>#{racontroller.fileXml}</code>
+            </pre>
+             </rich:modalPanel>
+          </s:div>
+     </s:validateAll>
+    </h:form>
+  </ui:define>
+</ui:composition>

@@ -1,0 +1,52 @@
+<ui:composition template="/template/master-index.xhtml"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:s="http://jboss.com/products/seam/taglib">
+  <ui:param name="initPage" value="true"/>
+  <ui:define name="content">
+    <h:form id="indexform">
+    
+      <div class="bloque">
+        <h:commandLink id="newig" action="goNewIg" class="nakedLink">
+          <s:conversationPropagation type="nested"/>
+          <div class="bloque_contenido opacity">
+            <div class="bloque_titulo">Nueva información geográfica</div>
+            <div class="bloque_imagen">
+              <img src="#{facesContext.externalContext.requestContextPath}/static/images/geografica.png" />
+            </div>
+            <div class="bloque_descripcion">Permite crear tablas espaciales a partir de ficheros Shapefiles y CSV</div>
+          </div>
+        </h:commandLink>
+      </div>
+
+      <div class="bloque">
+        <h:commandLink id="viewig" action="goViewIg" class="nakedLink">
+          <s:conversationPropagation type="nested"/>
+          <div class="bloque_contenido opacity">
+            <div class="bloque_titulo">Gestión de servicios</div>
+            <div class="bloque_imagen">
+              <img src="#{facesContext.externalContext.requestContextPath}/static/images/servicios.png" />
+            </div>
+            <div class="bloque_descripcion">Permite crear servicios espaciales a partir de las tablas cargadas en el sistema</div>
+          </div>
+        </h:commandLink>
+      </div>
+      
+      <div class="bloque">
+        <h:commandLink id="config" action="goConfiguration" class="nakedLink">
+          <s:conversationPropagation type="nested"/>
+          <div class="bloque_contenido opacity">
+            <div class="bloque_titulo">Configuración</div>
+            <div class="bloque_imagen">
+              <img src="#{facesContext.externalContext.requestContextPath}/static/images/conf.png" />
+            </div>
+            <div class="bloque_descripcion">Permite la configuración del panel de gestión del SIG Corporativo</div>
+          </div>
+        </h:commandLink>
+      </div>
+    </h:form>
+  </ui:define>
+</ui:composition>

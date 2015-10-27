@@ -1,0 +1,186 @@
+<ui:composition template="/template/master.xhtml"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:rich="http://richfaces.org/rich"
+  xmlns:s="http://jboss.com/products/seam/taglib">
+
+  <ui:define name="content">
+    <h:form id="geosearchform" enctype="multipart/form-data">
+      <s:validateAll>
+          <s:div>
+            <!-- ========================================= -->
+            <!-- ENCABEZADO -->
+            <!-- ========================================= -->
+            <table width="100%">
+              <tr>
+                <td style="float: left;"><h1><h:outputText value="#{msg['geosearch.title']}" /></h1></td>
+                <td style="float: right;">
+                  <a4j:commandButton id="clearFormBtn"
+                      title="#{msg['form.clear']}" action="#{geosearchController.reset()}"
+                      reRender="geosearchform,dataBasePanel,schemaPanel,tablePanel" ajaxSingle="true" styleClass="btn-clear" />
+                </td>
+              </tr>
+            </table>
+            
+            <!-- ========================================= -->
+            <!-- GENERIC ERRORS -->
+            <!-- ========================================= -->
+            <a4j:outputPanel id="genericErrorMessagePanel">
+              <h:messages globalOnly="true" errorClass="error" fatalClass="error" infoClass="success" />
+            </a4j:outputPanel>
+            
+            
+            <!-- ========================================= -->
+            <!-- CORE SELECTION -->
+            <!-- ========================================= -->
+            <h3><h:outputText value="#{msg['geosearch.selectCore.title']}" /></h3>
+            <s:div styleClass="alignCenter">
+               <h:panelGrid columns="3" id="coreSelectPanel">
+                 <h:outputLabel value="#{msg['geosearch.core.select']} (*):" style="margin-left: 20px;"/>
+                 <h:selectOneMenu id="coreSelect" value="#{geosearchController.core}" rendered="#{not geosearchController.newCore}"
+                    disabled="#{(not wscontroller.selectedTable) or (geosearchController.tables.size gt 1)}">
+                    <f:selectItem itemLabel="#{msg['select.empty']}" itemValue="#{null}" />
+                    <s:selectItems value="#{geosearchController.cores}" var="core" label="#{core}" itemValue="#{core}" />
+                    <a4j:support event="onchange" reRender="configurationPanel,configurationSection,geosearchAccessSection" 
+                        ajaxSingle="true" action="#{geosearchController.onSelectCore}"/>
+                 </h:selectOneMenu>
+                 <h:inputText id="newCoreInput" value="#{geosearchController.newCoreName}" style="width: 190px; margin-left: 2px;"
+                     rendered="#{geosearchController.newCore}" />
+                  <h:panelGrid columns="4">
+                    <a4j:commandButton action="#{geosearchController.setNewCore(not geosearchController.newCore)}"
+                      rendered="#{wscontroller.selectedTable}" immediate="true" styleClass="#{(geosearchController.newCore)?'btn-combo':'btn-nuevo'}"
+                      title="#{(geosearchController.newCore)?msg['geosearch.core.selectbutton']:msg['geosearch.core.newbutton']}"
+                      reRender="configurationPanel,coreSelectPanel,configurationSection,geosearchAccessSection" />
+                    <rich:spacer width="10px" />
+                    <a4j:commandButton action="#{geosearchController.createNewCore()}" rendered="#{geosearchController.newCore}"
+                      inmediate="true" styleClass="btn-save" title="#{msg['geosearch.core.save']}"
+                      reRender="coreSelectPanel,configurationPanel,configurationSection,geosearchAccessSection,genericErrorMessagePanel" />
+                  </h:panelGrid>
+              </h:panelGrid>
+             </s:div>
+            <rich:spacer height="20" />
+            
+            <!-- ========================================= -->
+            <!-- CONFIGURATION -->
+            <!-- ========================================= -->
+            <a4j:outputPanel id="configurationSection">
+              <s:div rendered="#{(geosearchController.core ne null) and (wscontroller.table ne null)}">
+                <h3><h:outputText value="#{msg['geosearch.configuration.title']}" /></h3>
+                <ui:include src="geosearch/configuration.xhtml" />
+                <rich:spacer height="20" />
+              </s:div>
+            </a4j:outputPanel>
+
+            <!-- ========================================= -->
+            <!-- GEOSEARCH ACCESS -->
+            <!-- ========================================= -->
+            <a4j:outputPanel id="geosearchAccessSection">
+              <s:div rendered="#{(geosearchController.core ne null) and (wscontroller.table ne null)}">
+                <h3><h:outputText value="#{msg['geosearch.access.title']}" /></h3>
+                <h:outputText value="Acceda a la administración de Geobúsquedas y ejecute los siguientes pasos:" />
+                <ul>
+                  <li><h:outputText value="Seleccione el core en el que quiere indexar la información" /></li>
+                  <li><h:outputText value="Acceda al apartado Schema e incluya el contenido del fichero schema.xml." /></li>
+                  <li><h:outputText value="Acceda al apartado Config e incluya el contenido del fichero config.xml." /></li>
+                  <li><h:outputText value="Acceda al apartado Dataimport y seleccione Configuración para incluir el contenido del fichero dataimport.xml." /></li>
+                  <li><h:outputText value="Acceda al aparatado Dataimport y lance el proceso de indexación" /></li>
+                </ul>
+                <rich:spacer height="20" />
+                <s:div styleClass="alignCenter">
+                   <h:outputLink target="_blank" value="#{geosearchController.url}" id="geosearchAccessButtonId"
+                        styleClass="botones">
+                        <h:outputText value="#{msg['geosearch.access.button']}" />
+                    </h:outputLink>
+                </s:div>
+              </s:div>
+            </a4j:outputPanel>
+            
+            <!-- ========================================= -->
+            <!-- SELECT TABLE PANEL -->
+            <!-- ========================================= -->
+            <a4j:outputPanel id="selectTableAjaxPanel">
+              <rich:modalPanel id="selectTablePanel" autosized="true" minWidth="700" rendered="#{geosearchController.newTable}"
+                 resizeable="false" moveable="false" showWhenRendered="#{geosearchController.newTable}" styleClass="selectTableModalPanel">
+                  <f:facet name="header">
+                      <h:panelGroup>
+                          <h:outputText value="SELECCIONE TABLA"></h:outputText>
+                      </h:panelGroup>
+                  </f:facet>
+                   <table class="workspace">
+                    <tr>
+                      <td rowspan="2" style="width: 45px;">
+                        <div class="db-icon"></div>
+                      </td>
+                      <!-- =================================== -->
+                      <!-- LABELS -->
+                      <!-- =================================== -->
+                      <td><h:outputText value="#{msg['workspace.database']}" /></td>
+                      <td rowspan="2" style="width: 45px;">
+                        <div class="schema-icon"></div>
+                      </td>
+                      <td><span><h:outputText value="#{msg['workspace.schema']}" /></span></td>
+                      <td rowspan="2" style="width: 48px;">
+                        <div class="table-icon"></div>
+                      </td>
+                      <td><h:outputText value="#{msg['workspace.table']}" /></td>
+                    </tr>
+                    <!-- =================================== -->
+                    <!-- SELECTS -->
+                    <!-- =================================== -->
+                    <tr>
+                      <td>
+                      <!-- DATA BASE -->
+                      <a4j:outputPanel id="dataBasePanelMP">
+                         <h:selectOneMenu value="#{wscontroller.dataBase}">
+                            <f:converter converterId="dataBaseConverter" />
+                            <f:selectItem itemLabel="#{msg['select.empty']}" itemValue="#{null}" />
+                            <s:selectItems value="#{wscontroller.dataBases}" var="dataBase" label="#{dataBase.alias}" />
+                            <a4j:support event="onchange" reRender="dataBasePanel,schemaPanel,tablePanel,schemaPanelMP,tablePanelMP"
+                                 ajaxSingle="true" action="#{wscontroller.loadSchemas()}" />
+                          </h:selectOneMenu>
+                        </a4j:outputPanel>
+                      </td>
+                      <!-- SCHEMA -->
+                      <td>
+                       <a4j:outputPanel id="schemaPanelMP">
+                         <h:selectOneMenu value="#{wscontroller.schema}" disabled="#{empty wscontroller.schemas}">
+                            <f:converter converterId="schemaConverter" />
+                            <f:selectItem itemLabel="#{msg['select.empty']}" itemValue="#{null}" noSelectionOption="true" />
+                            <s:selectItems value="#{wscontroller.schemas}" var="schema" label="#{schema.name}" />
+                            <a4j:support event="onchange" reRender="schemaPanel,tablePanel,tablePanelMP" ajaxSingle="true" action="#{wscontroller.loadTables()}" />
+                          </h:selectOneMenu>
+                        </a4j:outputPanel>
+                      </td>
+                      <!-- TABLE -->
+                      <td>
+                        <a4j:outputPanel id="tablePanelMP">
+                           <h:selectOneMenu id="selectWorkspaceTable" value="#{wscontroller.table}"
+                               disabled="#{empty wscontroller.tables}">
+                             <f:converter converterId="tableConverter" />
+                             <f:selectItem itemLabel="#{msg['select.empty']}" itemValue="#{null}" noSelectionOption="true" />
+                             <s:selectItems value="#{wscontroller.tables}" var="table" label="#{table.name}" />
+                             <a4j:support event="onchange" reRender="tablePanel" ajaxSingle="true" />
+                           </h:selectOneMenu>
+                           <rich:message for="selectWorkspaceTable" styleClass="error" />
+                        </a4j:outputPanel>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="6">
+                       <s:div styleClass="alignCenter">
+                           <a4j:commandButton value="#{msg['geosearch.table.select']}" styleClass="botones apaisado" ajaxSingle="true"
+                              action="#{geosearchController.selectTable(wscontroller.table)}" reRender="schemaPanel,tablePanel,dataBasePanel,geosearchform" />
+                        </s:div>
+                      </td>
+                    </tr>
+                  </table>
+                </rich:modalPanel>
+              </a4j:outputPanel>
+          </s:div>
+     </s:validateAll>
+    </h:form>
+  </ui:define>
+</ui:composition>

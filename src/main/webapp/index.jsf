@@ -1,0 +1,7 @@
+<%-- 
+Please DO NOT delete this file. This file is used
+to trick tomcat to detect index.jsf as the 
+welcome file and will load index.jsp instead.
+Truco gracias a :
+http://forum.java.sun.com/thread.jspa?threadID=696586&messageID=4044966
+--%>

@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<ui:component xmlns="http://www.w3.org/1999/xhtml" xml:lang="es"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:rich="http://richfaces.org/rich"
+  xmlns:s="http://jboss.com/products/seam/taglib">
+
+  <h:panelGrid columns="1" width="100%">
+    <s:div id="prueba_div" style="width: 800px; overflow-x: auto;" width="40%" styleClass="marginAuto">
+      <rich:dataTable value="#{gicontroller.rows}" var="row" width="100%" styleClass="alignCenter" 
+        rendered="#{wscontroller.selectedTable and (gicontroller.numRows gt 0)}">
+        <rich:columns value="#{gicontroller.columns}" var="column" index="ind">
+          <f:facet name="header">
+            <h:outputText value="#{column.nameOnTable}" />
+          </f:facet>
+          <h:outputText value="#{row.get(column.nameOnTable)}" rendered="#{row.geomFieldName ne column.nameOnTable}" />
+          <h:commandLink action="#{gicontroller.readGeometry(row)}"
+             rendered="#{row.geomFieldName eq column.nameOnTable}" value="Ver" />
+        </rich:columns>
+      </rich:dataTable>
+    </s:div>
+    
+    <!-- ========================================= -->
+    <!-- GEOM VIEW PANEL -->
+    <!-- ========================================= -->
+    <s:div id="dialogs">
+      <rich:modalPanel id="geomViewPanel" width="600" height="400" showWhenRendered="true"
+         resizeable="false" moveable="false" autosized="false"
+         style="text-align: left;" rendered="#{(gicontroller.geometryWKT ne null) and (not empty gicontroller.geometryWKT)}">
+          <f:facet name="header">
+              <h:panelGroup>
+                  <h:outputText value="#{msg['ig.information.geom']}"></h:outputText>
+              </h:panelGroup>
+          </f:facet>
+          <f:facet name="controls">
+              <h:panelGroup>
+                 <h:commandLink action="#{gicontroller.setGeometryWKT(null)}" styleClass="btn-cerrar" />
+              </h:panelGroup>
+          </f:facet>
+          <div class="geometry-wkt"><h:outputText value="#{gicontroller.geometryWKT}" /></div>
+       </rich:modalPanel>
+     </s:div>
+  </h:panelGrid>
+</ui:component>

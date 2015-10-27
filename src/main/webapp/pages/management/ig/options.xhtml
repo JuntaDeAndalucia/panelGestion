@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<ui:component xmlns="http://www.w3.org/1999/xhtml" xml:lang="es"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:rich="http://richfaces.org/rich"
+  xmlns:s="http://jboss.com/products/seam/taglib">
+
+  <h:panelGrid columns="1" width="100%">
+     <h:panelGrid columns="2" width="50%" styleClass="marginAuto">
+        <h:outputText value="#{msg['ig.options.delete']}" rendered="#{(not wscontroller.selectedTable) or (gicontroller.associatedTaskTicket ne null)}" 
+             styleClass="delete-table"/>
+        <h:outputLink id="deleteTableButton" value="#" styleClass="delete-table" rendered="#{wscontroller.selectedTable and (gicontroller.associatedTaskTicket eq null)}">
+           <h:outputText value="#{msg['ig.options.delete']}" />
+           <rich:componentControl for="deleteTableDialog" attachTo="deleteTableButton" operation="show" event="onclick"
+              rendered="#{wscontroller.selectedTable or (gicontroller.associatedTaskTicket eq null)}" />
+        </h:outputLink>
+        <h:outputText value="#{msg['ig.options.empty']}" rendered="#{(not wscontroller.selectedTable) or (gicontroller.associatedTaskTicket ne null)}" 
+             styleClass="empty-table"/>
+        <h:outputLink id="emptyTableButton" value="#" styleClass="empty-table" rendered="#{wscontroller.selectedTable and (gicontroller.associatedTaskTicket eq null)}">
+          <h:outputText value="#{msg['ig.options.empty']}" />
+          <rich:componentControl for="emptyTableDialog" attachTo="emptyTableButton" operation="show" event="onclick" />
+        </h:outputLink>
+     </h:panelGrid>
+  </h:panelGrid>
+  
+    <!-- ========================================= -->
+    <!-- CONFIRM DELETE TABLE PANEL -->
+    <!-- ========================================= -->
+    <rich:modalPanel id="deleteTableDialog" width="375" height="120" resizeable="false" moveable="false">
+      <f:facet name="header">
+        <h:panelGroup>
+          <h:outputText value="#{msg['ig.option.dialog.title']}"></h:outputText>
+        </h:panelGroup>
+      </f:facet>
+      <s:div rendered="#{empty gicontroller.publishedServices}">
+          <p>Se va a proceder a borrar la tabla <b><h:outputText value=" #{wscontroller.table.name} " /></b> ¿Está seguro?</p>
+      </s:div>
+      <s:div rendered="#{not empty gicontroller.publishedServices}">
+          <p>
+             No se puede borrar la tabla <b><h:outputText value=" #{wscontroller.table.name} " /></b>
+             porque posee servicios asociados. Borre los servicios asociados antes de borrar la tabla.
+          </p>
+      </s:div>
+      <h:panelGrid columns="2" width="100%" styleClass="alignCenter" rendered="#{empty gicontroller.publishedServices}">
+         <!-- YES -->
+         <a4j:commandButton value="#{msg['dialog.button.yes']}" styleClass="botones apaisado" 
+            action="#{gicontroller.deleteTable()}" reRender="contenido,tablePanel,schemaPanel" />
+         <!-- NO -->
+         <a4j:commandButton value="#{msg['dialog.button.no']}" styleClass="botones apaisado destacado"
+             onclick="#{rich:component('deleteTableDialog')}.hide()" />
+      </h:panelGrid>
+      <h:panelGrid columns="1" width="100%" styleClass="alignCenter" rendered="#{not empty gicontroller.publishedServices}">
+         <!-- OK -->
+         <a4j:commandButton value="#{msg['dialog.button.ok']}" styleClass="botones apaisado destacado"
+             onclick="#{rich:component('deleteTableDialog')}.hide()" style="margin-top: 0px;" />
+      </h:panelGrid>
+    </rich:modalPanel>
+    
+    <!-- ========================================= -->
+    <!-- CONFIRM EMPTY TABLE PANEL -->
+    <!-- ========================================= -->
+    <rich:modalPanel id="emptyTableDialog" width="375" height="120" resizeable="false" moveable="false">
+      <f:facet name="header">
+        <h:panelGroup>
+          <h:outputText value="#{msg['ig.option.dialog.title']}"></h:outputText>
+        </h:panelGroup>
+      </f:facet>
+      <p>Se va a proceder a borrar todos los datos correspondiente a la tabla
+          <b><h:outputText value=" #{wscontroller.table.name} " /></b> ¿Está seguro?
+      </p>
+      <h:panelGrid columns="2" width="100%" styleClass="alignCenter">
+         <!-- YES -->
+         <a4j:commandButton value="#{msg['dialog.button.yes']}" styleClass="botones apaisado" style="margin-top: 0px;"
+            action="#{gicontroller.emptyTable}" reRender="availableOptionsPanel,metadataPanel,extractInformationPanel,genericErrorMessagePanel"/>
+         <!-- NO -->
+         <a4j:commandButton value="#{msg['dialog.button.no']}" styleClass="botones apaisado destacado" style="margin-top: 0px;"
+             onclick="#{rich:component('emptyTableDialog')}.hide()" />
+      </h:panelGrid>
+    </rich:modalPanel>
+</ui:component>

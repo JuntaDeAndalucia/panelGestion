@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diagram model-entity="SeamPagesDiagram">
+ <item ID="#pages#index.xhtml" NAME="#xpages#xindex.xhtml"
+  PATH="/pages/index.xhtml" SHAPE="24,537,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/pages/newig.xhtml" NAME="output"
+   PATH="/pages/newig.xhtml" TARGET="#xpages#xnewig.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/ig.xhtml" NAME="output1"
+   PATH="/pages/management/ig.xhtml"
+   TARGET="#xpages#xmanagement#xig.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/configuration/configuration.xhtml" NAME="output2"
+   PATH="/pages/configuration/configuration.xhtml"
+   TARGET="#xpages#xconfiguration#xconfiguration.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#pages#newig.xhtml" NAME="#xpages#xnewig.xhtml"
+  PATH="/pages/newig.xhtml" SHAPE="344,537,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/pages/newig/tasksQueue.xhtml" NAME="output"
+   PATH="/pages/newig/tasksQueue.xhtml"
+   TARGET="#xpages#xnewig#xtasksQueue.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/newig/tasksQueue.xhtml" NAME="output1"
+   PATH="/pages/newig/tasksQueue.xhtml"
+   TARGET="#xpages#xnewig#xtasksQueue.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/ig.xhtml" NAME="output2"
+   PATH="/pages/management/ig.xhtml"
+   TARGET="#xpages#xmanagement#xig.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/ogc.xhtml" NAME="output3"
+   PATH="/pages/management/ogc.xhtml"
+   TARGET="#xpages#xmanagement#xogc.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/ra.xhtml" NAME="output4"
+   PATH="/pages/management/ra.xhtml"
+   TARGET="#xpages#xmanagement#xra.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/geobusquedas.xhtml" NAME="output5"
+   PATH="/pages/management/geobusquedas.xhtml"
+   TARGET="#xpages#xmanagement#xgeobusquedas.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/mapea.xhtml" NAME="output6"
+   PATH="/pages/management/mapea.xhtml"
+   TARGET="#xpages#xmanagement#xmapea.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/descargas.xhtml" NAME="output7"
+   PATH="/pages/management/descargas.xhtml"
+   TARGET="#xpages#xmanagement#xdescargas.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/configuration/configuration.xhtml" NAME="output8"
+   PATH="/pages/configuration/configuration.xhtml"
+   TARGET="#xpages#xconfiguration#xconfiguration.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#pages#newig#tasksQueue.xhtml"
+  NAME="#xpages#xnewig#xtasksQueue.xhtml"
+  PATH="/pages/newig/tasksQueue.xhtml" SHAPE="664,537,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/pages/newig.xhtml" NAME="output"
+   PATH="/pages/newig.xhtml" TARGET="#xpages#xnewig.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/ogc.xhtml" NAME="output1"
+   PATH="/pages/management/ogc.xhtml"
+   TARGET="#xpages#xmanagement#xogc.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/ra.xhtml" NAME="output2"
+   PATH="/pages/management/ra.xhtml"
+   TARGET="#xpages#xmanagement#xra.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/ig.xhtml" NAME="output3"
+   PATH="/pages/management/ig.xhtml"
+   TARGET="#xpages#xmanagement#xig.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/geobusquedas.xhtml" NAME="output4"
+   PATH="/pages/management/geobusquedas.xhtml"
+   TARGET="#xpages#xmanagement#xgeobusquedas.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/mapea.xhtml" NAME="output5"
+   PATH="/pages/management/mapea.xhtml"
+   TARGET="#xpages#xmanagement#xmapea.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/descargas.xhtml" NAME="output6"
+   PATH="/pages/management/descargas.xhtml"
+   TARGET="#xpages#xmanagement#xdescargas.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/configuration/configuration.xhtml" NAME="output7"
+   PATH="/pages/configuration/configuration.xhtml"
+   TARGET="#xpages#xconfiguration#xconfiguration.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#pages#management#ig.xhtml"
+  NAME="#xpages#xmanagement#xig.xhtml" PATH="/pages/management/ig.xhtml"
+  SHAPE="984,537,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/pages/newig/tasksQueue.xhtml" NAME="output"
+   PATH="/pages/newig/tasksQueue.xhtml"
+   TARGET="#xpages#xnewig#xtasksQueue.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/newig/tasksQueue.xhtml" NAME="output1"
+   PATH="/pages/newig/tasksQueue.xhtml"
+   TARGET="#xpages#xnewig#xtasksQueue.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/newig.xhtml" NAME="output2"
+   PATH="/pages/newig.xhtml" TARGET="#xpages#xnewig.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/ogc.xhtml" NAME="output3"
+   PATH="/pages/management/ogc.xhtml"
+   TARGET="#xpages#xmanagement#xogc.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/ra.xhtml" NAME="output4"
+   PATH="/pages/management/ra.xhtml"
+   TARGET="#xpages#xmanagement#xra.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/geobusquedas.xhtml" NAME="output5"
+   PATH="/pages/management/geobusquedas.xhtml"
+   TARGET="#xpages#xmanagement#xgeobusquedas.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/mapea.xhtml" NAME="output6"
+   PATH="/pages/management/mapea.xhtml"
+   TARGET="#xpages#xmanagement#xmapea.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/descargas.xhtml" NAME="output7"
+   PATH="/pages/management/descargas.xhtml"
+   TARGET="#xpages#xmanagement#xdescargas.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/configuration/configuration.xhtml" NAME="output8"
+   PATH="/pages/configuration/configuration.xhtml"
+   TARGET="#xpages#xconfiguration#xconfiguration.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#pages#management#ogc.xhtml"
+  NAME="#xpages#xmanagement#xogc.xhtml"
+  PATH="/pages/management/ogc.xhtml" SHAPE="1304,537,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/pages/newig.xhtml" NAME="output"
+   PATH="/pages/newig.xhtml" TARGET="#xpages#xnewig.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/ra.xhtml" NAME="output1"
+   PATH="/pages/management/ra.xhtml"
+   TARGET="#xpages#xmanagement#xra.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/ig.xhtml" NAME="output2"
+   PATH="/pages/management/ig.xhtml"
+   TARGET="#xpages#xmanagement#xig.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/geobusquedas.xhtml" NAME="output3"
+   PATH="/pages/management/geobusquedas.xhtml"
+   TARGET="#xpages#xmanagement#xgeobusquedas.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/mapea.xhtml" NAME="output4"
+   PATH="/pages/management/mapea.xhtml"
+   TARGET="#xpages#xmanagement#xmapea.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/descargas.xhtml" NAME="output5"
+   PATH="/pages/management/descargas.xhtml"
+   TARGET="#xpages#xmanagement#xdescargas.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/configuration/configuration.xhtml" NAME="output6"
+   PATH="/pages/configuration/configuration.xhtml"
+   TARGET="#xpages#xconfiguration#xconfiguration.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#pages#management#ra.xhtml"
+  NAME="#xpages#xmanagement#xra.xhtml" PATH="/pages/management/ra.xhtml"
+  SHAPE="1624,537,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/pages/newig.xhtml" NAME="output"
+   PATH="/pages/newig.xhtml" TARGET="#xpages#xnewig.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/ogc.xhtml" NAME="output1"
+   PATH="/pages/management/ogc.xhtml"
+   TARGET="#xpages#xmanagement#xogc.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/ig.xhtml" NAME="output2"
+   PATH="/pages/management/ig.xhtml"
+   TARGET="#xpages#xmanagement#xig.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/geobusquedas.xhtml" NAME="output3"
+   PATH="/pages/management/geobusquedas.xhtml"
+   TARGET="#xpages#xmanagement#xgeobusquedas.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/mapea.xhtml" NAME="output4"
+   PATH="/pages/management/mapea.xhtml"
+   TARGET="#xpages#xmanagement#xmapea.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/descargas.xhtml" NAME="output5"
+   PATH="/pages/management/descargas.xhtml"
+   TARGET="#xpages#xmanagement#xdescargas.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/configuration/configuration.xhtml" NAME="output6"
+   PATH="/pages/configuration/configuration.xhtml"
+   TARGET="#xpages#xconfiguration#xconfiguration.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#pages#management#geobusquedas.xhtml"
+  NAME="#xpages#xmanagement#xgeobusquedas.xhtml"
+  PATH="/pages/management/geobusquedas.xhtml" SHAPE="24,641,0,0"
+  TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/pages/newig.xhtml" NAME="output"
+   PATH="/pages/newig.xhtml" TARGET="#xpages#xnewig.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/ig.xhtml" NAME="output1"
+   PATH="/pages/management/ig.xhtml"
+   TARGET="#xpages#xmanagement#xig.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/ogc.xhtml" NAME="output2"
+   PATH="/pages/management/ogc.xhtml"
+   TARGET="#xpages#xmanagement#xogc.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/ra.xhtml" NAME="output3"
+   PATH="/pages/management/ra.xhtml"
+   TARGET="#xpages#xmanagement#xra.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/geobusquedas.xhtml" NAME="output4"
+   PATH="/pages/management/geobusquedas.xhtml"
+   TARGET="#xpages#xmanagement#xgeobusquedas.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/mapea.xhtml" NAME="output5"
+   PATH="/pages/management/mapea.xhtml"
+   TARGET="#xpages#xmanagement#xmapea.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/descargas.xhtml" NAME="output6"
+   PATH="/pages/management/descargas.xhtml"
+   TARGET="#xpages#xmanagement#xdescargas.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/configuration/configuration.xhtml" NAME="output7"
+   PATH="/pages/configuration/configuration.xhtml"
+   TARGET="#xpages#xconfiguration#xconfiguration.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#pages#management#mapea.xhtml"
+  NAME="#xpages#xmanagement#xmapea.xhtml"
+  PATH="/pages/management/mapea.xhtml" SHAPE="344,641,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/pages/newig.xhtml" NAME="output"
+   PATH="/pages/newig.xhtml" TARGET="#xpages#xnewig.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/ig.xhtml" NAME="output1"
+   PATH="/pages/management/ig.xhtml"
+   TARGET="#xpages#xmanagement#xig.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/ogc.xhtml" NAME="output2"
+   PATH="/pages/management/ogc.xhtml"
+   TARGET="#xpages#xmanagement#xogc.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/ra.xhtml" NAME="output3"
+   PATH="/pages/management/ra.xhtml"
+   TARGET="#xpages#xmanagement#xra.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/geobusquedas.xhtml" NAME="output4"
+   PATH="/pages/management/geobusquedas.xhtml"
+   TARGET="#xpages#xmanagement#xgeobusquedas.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/mapea.xhtml" NAME="output5"
+   PATH="/pages/management/mapea.xhtml"
+   TARGET="#xpages#xmanagement#xmapea.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/descargas.xhtml" NAME="output6"
+   PATH="/pages/management/descargas.xhtml"
+   TARGET="#xpages#xmanagement#xdescargas.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/configuration/configuration.xhtml" NAME="output7"
+   PATH="/pages/configuration/configuration.xhtml"
+   TARGET="#xpages#xconfiguration#xconfiguration.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#pages#management#descargas.xhtml"
+  NAME="#xpages#xmanagement#xdescargas.xhtml"
+  PATH="/pages/management/descargas.xhtml" SHAPE="664,641,0,0"
+  TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/pages/newig.xhtml" NAME="output"
+   PATH="/pages/newig.xhtml" TARGET="#xpages#xnewig.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/ig.xhtml" NAME="output1"
+   PATH="/pages/management/ig.xhtml"
+   TARGET="#xpages#xmanagement#xig.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/ogc.xhtml" NAME="output2"
+   PATH="/pages/management/ogc.xhtml"
+   TARGET="#xpages#xmanagement#xogc.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/ra.xhtml" NAME="output3"
+   PATH="/pages/management/ra.xhtml"
+   TARGET="#xpages#xmanagement#xra.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/geobusquedas.xhtml" NAME="output4"
+   PATH="/pages/management/geobusquedas.xhtml"
+   TARGET="#xpages#xmanagement#xgeobusquedas.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/mapea.xhtml" NAME="output5"
+   PATH="/pages/management/mapea.xhtml"
+   TARGET="#xpages#xmanagement#xmapea.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/descargas.xhtml" NAME="output6"
+   PATH="/pages/management/descargas.xhtml"
+   TARGET="#xpages#xmanagement#xdescargas.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/configuration/configuration.xhtml" NAME="output7"
+   PATH="/pages/configuration/configuration.xhtml"
+   TARGET="#xpages#xconfiguration#xconfiguration.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#pages#configuration#configuration.xhtml"
+  NAME="#xpages#xconfiguration#xconfiguration.xhtml"
+  PATH="/pages/configuration/configuration.xhtml" SHAPE="984,641,0,0"
+  TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/pages/newig.xhtml" NAME="output"
+   PATH="/pages/newig.xhtml" TARGET="#xpages#xnewig.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/ig.xhtml" NAME="output1"
+   PATH="/pages/management/ig.xhtml"
+   TARGET="#xpages#xmanagement#xig.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/ogc.xhtml" NAME="output2"
+   PATH="/pages/management/ogc.xhtml"
+   TARGET="#xpages#xmanagement#xogc.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/ra.xhtml" NAME="output3"
+   PATH="/pages/management/ra.xhtml"
+   TARGET="#xpages#xmanagement#xra.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/geobusquedas.xhtml" NAME="output4"
+   PATH="/pages/management/geobusquedas.xhtml"
+   TARGET="#xpages#xmanagement#xgeobusquedas.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/mapea.xhtml" NAME="output5"
+   PATH="/pages/management/mapea.xhtml"
+   TARGET="#xpages#xmanagement#xmapea.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/pages/management/descargas.xhtml" NAME="output6"
+   PATH="/pages/management/descargas.xhtml"
+   TARGET="#xpages#xmanagement#xdescargas.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="org.jboss.seam.NoConversationException"
+  NAME="exception:org.jboss.seam.NoConversationException"
+  PATH="org.jboss.seam.NoConversationException" SHAPE="24,17,0,0"
+  TYPE="exception" model-entity="SeamPagesDiagramItem">
+  <output ID="/pages/index.xhtml" NAME="output"
+   PATH="/pages/index.xhtml" TARGET="#xpages#xindex.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="java.lang.IllegalStateException"
+  NAME="exception:java.lang.IllegalStateException"
+  PATH="java.lang.IllegalStateException" SHAPE="24,121,0,0"
+  TYPE="exception" model-entity="SeamPagesDiagramItem">
+  <output ID="/pages/index.xhtml" NAME="output"
+   PATH="/pages/index.xhtml" TARGET="#xpages#xindex.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="com.sun.facelets.tag.TagAttributeException"
+  NAME="exception:com.sun.facelets.tag.TagAttributeException"
+  PATH="com.sun.facelets.tag.TagAttributeException" SHAPE="24,225,0,0"
+  TYPE="exception" model-entity="SeamPagesDiagramItem">
+  <output ID="/pages/index.xhtml" NAME="output"
+   PATH="/pages/index.xhtml" TARGET="#xpages#xindex.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="java.lang.Throwable" NAME="exception:java.lang.Throwable"
+  PATH="java.lang.Throwable" SHAPE="24,329,0,0" TYPE="exception" model-entity="SeamPagesDiagramItem">
+  <output ID="/errores/error.xhtml" NAME="output"
+   PATH="/errores/error.xhtml" TARGET="#xerrores#xerror.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item NAME="exception:" SHAPE="24,433,0,0" TYPE="exception" model-entity="SeamPagesDiagramItem">
+  <output ID="/errores/error.xhtml" NAME="output"
+   PATH="/errores/error.xhtml" TARGET="#xerrores#xerror.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item NAME="#xerrores#xerror.xhtml" PATH="/errores/error.xhtml"
+  SHAPE="376,329,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="javax.faces.application.ViewExpiredException"
+  NAME="exception:javax.faces.application.ViewExpiredException"
+  PATH="javax.faces.application.ViewExpiredException" SHAPE="24,537,0,0"
+  TYPE="exception" model-entity="SeamPagesDiagramItem">
+  <output ID="/pages/index.xhtml" NAME="output"
+   PATH="/pages/index.xhtml" TARGET="#xpages#xindex.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+</diagram>

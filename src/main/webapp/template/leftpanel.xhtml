@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<ui:component xmlns="http://www.w3.org/1999/xhtml" xml:lang="es"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:rich="http://richfaces.org/rich"
+  xmlns:s="http://jboss.com/products/seam/taglib">
+
+  <a4j:form id="leftpanel">
+  <div id="lateral">
+    <div class="lateral_menu_apartado">
+      <div class="lateral_titulo_apartado">
+        <img src="#{facesContext.externalContext.requestContextPath}/static/images/geografica-16.png" /> <a href="#">Información
+          geográfica</a>
+      </div>
+    </div>
+    <div class="lateral_menu_apartado">
+      <div class="lateral_titulo_apartado2">
+        <s:link action="goNewIg" value="Nueva información geográfica" />
+      </div>
+    </div>
+    <div class="lateral_menu_apartado">
+      <div class="lateral_titulo_apartado">
+        <img src="#{facesContext.externalContext.requestContextPath}/static/images/servicios-16.png" /> <a
+          href="#">Gestión</a>
+      </div>
+    </div>
+    <div class="lateral_menu_apartado">
+      <div class="lateral_titulo_apartado2">
+        <h:commandLink action="goViewIg" value="Información geográfica" />
+      </div>
+      <div class="lateral_titulo_apartado2">
+        <h:commandLink action="goOgc" value="Servicios OGC">
+        </h:commandLink>
+      </div>
+      <div class="lateral_titulo_apartado2">
+        <h:commandLink action="goRa" value="Servicios de realidad aumentada" />
+      </div>
+      <div class="lateral_titulo_apartado2">
+        <h:commandLink action="goGeobusquedas" value="Servicios de geobúsquedas" />
+      </div>
+      <!-- <div class="lateral_titulo_apartado2">
+        <h:commandLink action="goMapea" value="Mapea" />
+      </div>
+      <div class="lateral_titulo_apartado2">
+        <h:commandLink action="goDescargas" value="Descargas" />
+      </div> -->
+    </div>
+    <div class="lateral_menu_apartado">
+      <div class="lateral_titulo_apartado">
+        <img src="#{facesContext.externalContext.requestContextPath}/static/images/conf-16.png" />
+        <a href="#">Configuración</a>
+      </div>
+    </div>
+    <div class="lateral_menu_apartado">
+      <div class="lateral_titulo_apartado2">
+        <h:commandLink action="goConfiguration" value="Configuración del panel" />
+      </div>
+    </div>
+  </div>
+  </a4j:form>
+</ui:component>

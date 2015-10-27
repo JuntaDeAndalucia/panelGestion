@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Empresa desarrolladora: GUADALTEL S.A.
+
+    Autor: Junta de Andalucía
+
+    Derechos de explotación propiedad de la Junta de Andalucía.
+
+    Este programa es software libre: usted tiene derecho a redistribuirlo y/o modificarlo bajo los términos de la
+
+    Licencia EUPL European Public License publicada por el organismo IDABC de la Comisión Europea, en su versión 1.0.
+    o posteriores.
+
+    Este programa se distribuye de buena fe, pero SIN NINGUNA GARANTÍA, incluso sin las presuntas garantías implícitas
+    de USABILIDAD o ADECUACIÓN A PROPÓSITO CONCRETO. Para mas información consulte la Licencia EUPL European Public
+    License.
+
+    Usted recibe una copia de la Licencia EUPL European Public License junto con este programa, si por algún motivo no
+    le es posible visualizarla, puede consultarla en la siguiente URL: http://ec.europa.eu/idabc/servlets/Doc?id=31099
+
+    You should have received a copy of the EUPL European Public License along with this program. If not, see
+    http://ec.europa.eu/idabc/servlets/Doc?id=31096
+
+    Vous devez avoir reçu une copie de la EUPL European Public License avec ce programme. Si non, voir
+    http://ec.europa.eu/idabc/servlets/Doc?id=30194
+
+    Sie sollten eine Kopie der EUPL European Public License zusammen mit diesem Programm. Wenn nicht, finden Sie da
+    http://ec.europa.eu/idabc/servlets/Doc?id=29919
+
+-->
+<configuration>
+  <!-- ============================= -->
+  <!--            GENERAL            -->
+  <!-- ============================= -->
+  <general>
+     <!-- URL de los clientes básicos del callejero -->
+     <nordir-geodir-url value="http://www.juntadeandalucia.es/servicios/mapas/geocoding-tools/clientSelector.jsp" />
+     
+     <!-- GEOSERVER -->
+     <geoservers>
+	     <geoserver>
+	       <url value="http://clientes.guadaltel.es/desarrollo/geossigc" />
+	       <user value="admin" />
+	       <password value="geossigc" />
+	       <!-- versiones para las peticiones de los servicios WMS y WFS -->
+	       <version>
+	         <wms value="1.3.0" />
+	         <wfs value="2.0.0" />
+	       </version>
+	     </geoserver>
+	     <!--<geoserver>
+	       <url value="URL-GEOSERVER" />
+	       <user value="USER" />
+	       <password value="PASSWORD" />-->
+	       <!-- versiones para las peticiones de los servicios WMS y WFS -->
+	        <!-- <version>
+	         <wms value="1.3.0" />
+	         <wfs value="2.0.0" />
+	       </version>
+	     </geoserver>  -->
+     </geoservers>
+     
+     <!-- JARA -->
+     <jara>
+        <url value="http://localhost/jara/web/jara.php?lang=en&amp;countryCode=ES&amp;userId=6f85d06929d160a7c8a3cc1ab4b54b87db99f74b&amp;lon=-6.0338973999&amp;version=3.0&amp;radius=50000&amp;lat=37.3732948841&amp;accuracy=100&amp;layerName=" />
+        <config-dir value="/tmp" />
+     </jara>
+     
+     <!-- MAPEA -->
+     <mapea>
+       <url value="http://mapea-sigc.juntadeandalucia.es?" />
+       <wmcfile value="callejero" />
+       <controls value="navtoolbar,layerswitcher" />
+     </mapea>
+     
+     <!-- TASKS -->
+     <task>
+        <progressInterval value="2000" />
+        <linesToSave value="25" />
+     </task>
+     
+      <!-- GEOSEARCH -->
+      <geosearch>
+        <master url="http://clientes.guadaltel.es/desarrollo/geosearch"
+          user="chap" password="geosearch2sigc" srs="EPSG:23030">
+          <files>
+            <config fileName="solrconfig.xml" searchHandler="/search" />
+            <schema fileName="schema.xml" defaultSearchField="text" />
+            <dataImport name="/admin/panel-dataimport"
+              class="org.apache.solr.handler.dataimport.DataImportHandler"
+              fileName="imports/panel-dataimport.xml" type="JdbcDataSource"
+              driver="org.postgresql.Driver"
+              transformer="es.juntadeandalucia.geosearch.transforms.PostGISTransform" />
+          </files>
+        </master>
+        <slaves>
+        </slaves>
+      </geosearch>
+  </general>
+  
+  <!-- ============================= -->
+  <!--          JDBC POOL            -->
+  <!-- ============================= -->
+  <jdbc-pool>
+   <maxActive>30</maxActive>
+   <maxIdle>10</maxIdle>
+   <maxWait>-1</maxWait>
+   <!--<validationInterval></validationInterval>
+   <timeBetweenEvictionRunsMillis></timeBetweenEvictionRunsMillis>
+   <initialSize></initialSize>
+   <removeAbandonedTimeout></removeAbandonedTimeout>
+   <minEvictableIdleTimeMillis></minEvictableIdleTimeMillis>
+   <minIdle></minIdle>
+   <removeAbandoned></removeAbandoned>
+   <jdbcInterceptors></jdbcInterceptors>-->
+  </jdbc-pool>
+  
+  <!-- ============================= -->
+  <!--         REPOSITORIES          -->
+  <!-- ============================= -->
+  <repositories>
+    <repository>
+      <alias>Archivos pequeños</alias>
+      <url>http://192.168.61.238/webdav/small/</url>
+      <user>panelsigc</user>
+      <password>panelsigc</password>
+    </repository>
+    <repository>
+      <alias>Archivos grandes</alias>
+      <url>http://192.168.61.238/webdav/large/</url>
+      <user>panelsigc</user>
+      <password>panelsigc</password>
+    </repository>
+    <repository>
+      <alias>DEA100 - Relieve</alias>
+      <url>http://192.168.61.238/webdav/dea100/G01_Relieve/</url>
+      <user>panelsigc</user>
+      <password>panelsigc</password>
+    </repository>
+    <repository>
+      <alias>DEA100 - Med. Fisico</alias>
+      <url>http://192.168.61.238/webdav/dea100/G02_MedioFisico/</url>
+      <user>panelsigc</user>
+      <password>panelsigc</password>
+    </repository>
+    <repository>
+      <alias>DEA100 - Hidrografia</alias>
+      <url>http://192.168.61.238/webdav/dea100/G03_Hidrografia/</url>
+      <user>panelsigc</user>
+      <password>panelsigc</password>
+    </repository>
+    <repository>
+      <alias>DEA100 - Servicios</alias>
+      <url>http://192.168.61.238/webdav/dea100/G14_Servicios/</url>
+      <user>panelsigc</user>
+      <password>panelsigc</password>
+    </repository>
+  </repositories>
+  
+  <!-- ============================= -->
+  <!--         TIPOS DE LA BD        -->
+  <!-- ============================= -->
+  <!-- the sqlType are values from the class java.sql.Types -->
+  <dataBaseType>
+     <label>text</label>
+     <sqlType>VARCHAR</sqlType>
+  </dataBaseType>
+  <dataBaseType>
+     <label>character varying</label>
+     <sqlType>VARCHAR</sqlType>
+  </dataBaseType>
+  <dataBaseType>
+     <label>geometry</label>
+     <sqlType>OTHER</sqlType>
+  </dataBaseType>
+  <dataBaseType>
+     <label>Coordenada X</label>
+     <sqlType>OTHER</sqlType>
+  </dataBaseType>
+  <dataBaseType>
+     <label>Coordenada Y</label>
+     <sqlType>OTHER</sqlType>
+  </dataBaseType>
+  <dataBaseType>
+     <label>integer</label>
+     <sqlType>INTEGER</sqlType>
+  </dataBaseType>
+  <dataBaseType>
+     <label>numeric</label>
+     <sqlType>NUMERIC</sqlType>
+  </dataBaseType>
+  <dataBaseType>
+     <label>double precision</label>
+     <sqlType>DOUBLE</sqlType>
+  </dataBaseType>
+  <dataBaseType>
+     <label>character</label>
+     <sqlType>CHAR</sqlType>
+  </dataBaseType>
+  <dataBaseType>
+     <label>bigint</label>
+     <sqlType>BIGINT</sqlType>
+  </dataBaseType>
+  <dataBaseType>
+     <label>smallint</label>
+     <sqlType>SMALLINT</sqlType>
+  </dataBaseType>
+  <dataBaseType>
+     <label>date</label>
+     <sqlType>DATE</sqlType>
+  </dataBaseType>
+  
+  <!-- ============================= -->
+  <!--           PROJECTION          -->
+  <!-- ============================= -->
+  <projections>
+     <projection>EPSG:23030</projection>
+     <projection>EPSG:23029</projection>
+     <projection>EPSG:25830</projection>
+     <projection>EPSG:25829</projection>
+     <projection>EPSG:4326</projection>
+     <projection>EPSG:4258</projection>
+     <projection>EPSG:4230</projection>
+     <projection>EPSG:32629</projection>
+     <projection>EPSG:32630</projection>
+  </projections>
+  
+  <!-- ============================= -->
+  <!--             FILES             -->
+  <!-- ============================= -->
+  <files type="csv">
+     <content-type>text/plain</content-type>
+     <content-type>text/csv</content-type>
+     <content-type>application/octet-stream</content-type>
+  </files>
+  <files type="shape">
+     <content-type>application/octet-stream</content-type>
+     <content-type>application/binary</content-type>
+     <content-type>application/x-qgis</content-type>
+  </files>
+  <files type="compressed">
+     <content-type>application/octet-stream</content-type>
+     <content-type>application/binary</content-type>
+     <content-type>application/x-gzip</content-type>
+     <content-type>application/zip</content-type>
+     <content-type>application/x-zip</content-type>
+     <content-type>application/x-zip-compressed</content-type>
+     <content-type>application/x-rar-compressed</content-type>
+     <content-type>application/x-compressed</content-type>
+     <content-type>application/x-tar</content-type>
+  </files>
+  
+       <!-- DATABASETYPES -->
+     <databasetypes>
+	     <databaseType>
+	       <name value="postgresql" />
+	     </databaseType>
+     </databasetypes>
+</configuration>

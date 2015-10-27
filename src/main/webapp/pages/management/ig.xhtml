@@ -1,0 +1,85 @@
+<ui:composition template="/template/master.xhtml"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:rich="http://richfaces.org/rich"
+  xmlns:s="http://jboss.com/products/seam/taglib">
+
+  <ui:define name="content">
+    <h:form id="igform">
+      <s:validateAll>
+          <s:div>
+            <!-- ========================================= -->
+            <!-- ENCABEZADO -->
+            <!-- ========================================= -->
+            <table width="100%">
+              <tr>
+                <td style="float: left;"><h1><h:outputText value="#{msg['ig.title']}" /></h1></td>
+              </tr>
+            </table>
+            
+            <!-- ========================================= -->
+            <!-- GENERIC ERRORS -->
+            <!-- ========================================= -->
+            <a4j:outputPanel id="genericErrorMessagePanel">
+              <h:messages globalOnly="true" errorClass="error" fatalClass="error" infoClass="success" />
+              <h:panelGrid columns="1">
+                <h:outputText value="ATENCIÓN: No puede efectuarse operaciones sobre la tabla seleccionada debido a que está siendo usada por la tarea" styleClass="warning" rendered="#{wscontroller.selectedTable and (gicontroller.associatedTaskTicket ne null)}"/>
+                <h:commandLink id="goTaskButtonId" action="goViewTask" value="#{gicontroller.associatedTaskTicket}" rendered="#{wscontroller.selectedTable and (gicontroller.associatedTaskTicket ne null)}">
+                    <s:conversationId/>
+                    <s:conversationPropagation type="nested"/>
+                    <img src="#{facesContext.externalContext.requestContextPath}/static/images/template/next.png" />
+                </h:commandLink>
+              </h:panelGrid>
+            </a4j:outputPanel>
+            
+            <!-- ========================================= -->
+            <!-- AVAILABLE OPTIONS -->
+            <!-- ========================================= -->
+            <a4j:outputPanel id="availableOptionsPanel">
+               <s:div style="background-color: rgba(240, 240, 240, 1); border-radius: 5px;">
+                  <h3><h:outputText value="#{msg['ig.options.title']}" /></h3>
+                  <ui:include src="ig/options.xhtml" />
+               </s:div>
+            </a4j:outputPanel>
+            
+            <rich:spacer height="20px" />
+            
+            <!-- ========================================= -->
+            <!-- PUBLISHED SERVICES -->
+            <!-- ========================================= -->
+            <a4j:outputPanel id="publishedServicesPanel">
+                <h2><h:outputText value="#{msg['ig.services.title']}" /></h2>
+                <h:outputText value="#{msg['table.deselected']}" rendered="#{not wscontroller.selectedTable}" />
+                <ui:include src="ig/services.xhtml" />
+            </a4j:outputPanel>
+            
+            <rich:spacer height="20px" />
+            
+            <!-- ========================================= -->
+            <!-- METADATA -->
+            <!-- ========================================= -->
+            <a4j:outputPanel id="metadataPanel">
+                <h2><h:outputText value="#{msg['ig.metadata.title']}" /></h2>
+                <h:outputText value="#{msg['table.deselected']}" rendered="#{not wscontroller.selectedTable}" />
+                <ui:include src="ig/metadata.xhtml" />
+            </a4j:outputPanel>
+            
+            <rich:spacer height="20px" />
+            
+            <!-- ========================================= -->
+            <!-- EXTRACT IFORMATION -->
+            <!-- ========================================= -->
+            <a4j:outputPanel id="extractInformationPanel">
+                <h2><h:outputText value="#{msg['ig.information.title']}" /></h2>
+                <h:outputText value="#{msg['table.deselected']}" rendered="#{not wscontroller.selectedTable}" />
+                <h:outputText value="#{msg['table.data.empty']}" rendered="#{(gicontroller.numRows ne null) and (gicontroller.numRows eq 0)}" />
+                <ui:include src="ig/information.xhtml" />
+            </a4j:outputPanel>
+          </s:div>
+     </s:validateAll>
+    </h:form>
+  </ui:define>
+</ui:composition>

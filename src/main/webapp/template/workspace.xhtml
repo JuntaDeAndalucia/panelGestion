@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<ui:component xmlns="http://www.w3.org/1999/xhtml" xml:lang="es"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:rich="http://richfaces.org/rich"
+  xmlns:s="http://jboss.com/products/seam/taglib">
+
+<h:form>
+    <div id="menu_opc">
+      <div id="menu2_opc">
+       <h:outputText value="#{msg['workspace.select.message']}" styleClass="select-table-msg" />
+        <table class="workspace">
+          <tr>
+            <td rowspan="2" style="width: 45px;">
+              <div class="db-icon"></div>
+            </td>
+            <!-- =================================== -->
+            <!-- LABELS -->
+            <!-- =================================== -->
+            <td><h:outputText value="#{msg['workspace.database']}" /></td>
+            <td rowspan="2" style="width: 45px;">
+              <div class="schema-icon"></div>
+            </td>
+            <td><span><h:outputText value="#{msg['workspace.schema']}" /></span></td>
+            <td rowspan="2" style="width: 48px;">
+              <div class="table-icon"></div>
+            </td>
+            <td><h:outputText value="#{msg['workspace.table']}" /></td>
+          </tr>
+          <!-- =================================== -->
+          <!-- SELECTS -->
+          <!-- =================================== -->
+          <tr>
+            <td>
+            <!-- DATA BASE -->
+            <a4j:outputPanel id="dataBasePanel">
+               <h:selectOneMenu value="#{wscontroller.dataBase}">
+                  <f:converter converterId="dataBaseConverter" />
+                  <f:selectItem itemLabel="#{msg['select.empty']}" itemValue="#{null}" />
+                  <s:selectItems value="#{wscontroller.dataBases}" var="dataBase" label="#{dataBase.alias}" />
+                  <a4j:support event="onchange" reRender="contenido,schemaPanel,tablePanel"
+                       ajaxSingle="true" action="#{wscontroller.loadSchemas()}" />
+                </h:selectOneMenu>
+              </a4j:outputPanel>
+            </td>
+            <!-- SCHEMA -->
+            <td>
+             <a4j:outputPanel id="schemaPanel">
+               <h:selectOneMenu value="#{wscontroller.schema}" disabled="#{empty wscontroller.schemas}">
+                  <f:converter converterId="schemaConverter" />
+                  <f:selectItem itemLabel="#{msg['select.empty']}" itemValue="#{null}" noSelectionOption="true" />
+                  <s:selectItems value="#{wscontroller.schemas}" var="schema" label="#{schema.name}" />
+                  <a4j:support event="onchange" reRender="contenido,tablePanel" ajaxSingle="true" action="#{wscontroller.loadTables()}" />
+                </h:selectOneMenu>
+              </a4j:outputPanel>
+            </td>
+            <!-- TABLE -->
+            <td>
+              <a4j:outputPanel id="tablePanel">
+                 <h:selectOneMenu id="selectWorkspaceTable" value="#{wscontroller.table}"
+                     disabled="#{empty wscontroller.tables}">
+                   <f:converter converterId="tableConverter" />
+                   <f:selectItem itemLabel="#{msg['select.empty']}" itemValue="#{null}" noSelectionOption="true" />
+                   <s:selectItems value="#{wscontroller.tables}" var="table" label="#{table.name}" />
+                   <a4j:support event="onchange" reRender="contenido" ajaxSingle="true" action="#{wscontroller.onSelectedTable()}" />
+                 </h:selectOneMenu>
+                 <rich:message for="selectWorkspaceTable" styleClass="error" />
+              </a4j:outputPanel>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+</h:form>
+</ui:component>

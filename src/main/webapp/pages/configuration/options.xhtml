@@ -1,0 +1,18 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<ui:component xmlns="http://www.w3.org/1999/xhtml" xml:lang="es"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:rich="http://richfaces.org/rich"
+  xmlns:s="http://jboss.com/products/seam/taglib">
+
+  <h:panelGrid columns="1" width="100%">
+     <h:panelGrid columns="2" width="50%" styleClass="marginAuto">
+        <a4j:commandLink action="#{configurationCtrl.newDataBase}" id="newDatabaseButton" value="#{msg['configuration.options.newDataBase']}"
+         styleClass="new-db" reRender="dialogs"></a4j:commandLink>
+        <a4j:commandLink action="#{configurationCtrl.newSchema}" id="newSchemaButton" value="#{msg['configuration.options.newSchema']}"
+         styleClass="new-schema" reRender="dialogs"></a4j:commandLink>
+     </h:panelGrid>
+  </h:panelGrid>
+</ui:component>

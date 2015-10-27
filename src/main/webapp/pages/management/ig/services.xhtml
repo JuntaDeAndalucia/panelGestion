@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<ui:component xmlns="http://www.w3.org/1999/xhtml" xml:lang="es"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:rich="http://richfaces.org/rich"
+  xmlns:s="http://jboss.com/products/seam/taglib">
+
+    <!-- RESUME -->
+    <h3><h:outputText value="#{msg['ig.services.overview']}" rendered="#{wscontroller.selectedTable}"/></h3>
+    <h:panelGrid columns="5" styleClass="alignCenter" width="100%" rendered="#{wscontroller.selectedTable}">
+       <h:panelGrid columns="1" width="100%">
+          <f:facet name="header">
+             <h:outputText value="#{msg['ig.services.wms']}" />
+          </f:facet>
+          <img src="#{facesContext.externalContext.requestContextPath}/static/images/iconos/#{gicontroller.hasPublishedWMS()?'tick':'remove'}.png" />
+       </h:panelGrid>
+       <h:panelGrid columns="1" width="100%">
+         <f:facet name="header">
+            <h:outputText value="#{msg['ig.services.wfs']}" />
+         </f:facet>
+         <img src="#{facesContext.externalContext.requestContextPath}/static/images/iconos/#{gicontroller.hasPublishedWFS()?'tick':'remove'}.png" />
+       </h:panelGrid>
+       <h:panelGrid columns="1" width="100%">
+         <f:facet name="header">
+            <h:outputText value="#{msg['ig.services.ra']}" />
+         </f:facet>
+         <img src="#{facesContext.externalContext.requestContextPath}/static/images/iconos/#{gicontroller.hasPublishedRA()?'tick':'remove'}.png" />
+       </h:panelGrid>
+       <h:panelGrid columns="1" width="100%">
+         <f:facet name="header">
+            <h:outputText value="#{msg['ig.services.geosearch']}" />
+         </f:facet>
+         <img src="#{facesContext.externalContext.requestContextPath}/static/images/iconos/#{gicontroller.hasPublishedGeosearch()?'tick':'remove'}.png" />
+       </h:panelGrid>
+       <!-- <h:panelGrid columns="1" width="100%">
+         <f:facet name="header">
+            <h:outputText value="#{msg['ig.services.downloads']}" />
+         </f:facet>
+         <img src="#{facesContext.externalContext.requestContextPath}/static/images/iconos/#{gicontroller.hasPublishedDownloads()?'tick':'remove'}.png" />
+       </h:panelGrid> -->
+    </h:panelGrid>
+    <rich:spacer height="10px" rendered="#{wscontroller.selectedTable}"/>
+    
+    <!-- DETAILS -->
+    
+    <h3><h:outputText value="#{msg['ig.services.details']}" rendered="#{wscontroller.selectedTable}"/></h3>
+    <rich:dataTable width="100%" value="#{gicontroller.publishedServices}" var="service" 
+      styleClass="marginAuto alignCenter" rowClasses="fila1, fila2" rendered="#{wscontroller.selectedTable}">
+      <h:column>
+        <f:facet name="header">
+          <h:outputText value="#{msg['ig.services.type']}" />
+        </f:facet>
+        <h:outputText value="#{service.type.acronym}" />
+      </h:column>
+      <h:column>
+        <f:facet name="header">
+          <h:outputText value="#{msg['ig.services.name']}" />
+        </f:facet>
+        <h:outputText value="#{service.name}" />
+      </h:column>
+      <h:column>
+        <f:facet name="header">
+          <h:outputText value="#{msg['ig.services.check']}" />
+        </f:facet>
+        <h:outputLink target="_blank" value="#{gicontroller.completeURLWMSorWFS(service)}"
+          styleClass="go" />
+          <h:outputLink target="_blank" value="#{gicontroller.getMapeaUrl(service)}"
+          styleClass="go-mapea" rendered="#{gicontroller.hasMapea(service)}"
+                title="#{msg['ig.services.mapea.link.title']}" />
+          <h:commandButton action="#{gicontroller.getRAFile(service)}"
+                styleClass="ra-file" rendered="#{service.type.acronym == 'RA'}"
+                title="#{msg['ig.services.ra.link.title']}" />
+      </h:column>
+      <h:column>
+        <f:facet name="header">
+          <h:outputText value="#{msg['ig.services.delete']}" />
+        </f:facet>
+        <h:commandLink action="#{gicontroller.setServiceToRemove(service)}"
+           styleClass="remove"/>
+      </h:column>
+    </rich:dataTable>
+    
+    <!-- ========================================= -->
+    <!-- CONFIRM REMOVE SERVICE PANEL -->
+    <!-- ========================================= -->
+    <a4j:outputPanel id="removeServiceDialogPanel">
+      <rich:modalPanel id="removeServiceDialog" width="375" height="120" resizeable="false" moveable="false"
+        rendered="#{gicontroller.serviceToRemove ne null}" showWhenRendered="true">
+        <f:facet name="header">
+          <h:panelGroup>
+            <h:outputText value="#{msg['ig.option.dialog.title']}"></h:outputText>
+          </h:panelGroup>
+        </f:facet>
+        <p>¿Está seguro de eliminar el servicio <b><h:outputText value="#{gicontroller.serviceToRemove.name}" /></b>?</p>
+        <h:panelGrid columns="2" width="100%" styleClass="alignCenter">
+           <!-- YES -->
+           <a4j:commandButton value="#{msg['dialog.button.yes']}" styleClass="botones apaisado" style="margin-top: 0px;"
+              action="#{gicontroller.removeService(gicontroller.serviceToRemove)}" reRender="publishedServicesPanel,availableOptionsPanel,genericErrorMessagePanel,tablePanel"/>
+           <!-- NO -->
+           <a4j:commandButton value="#{msg['dialog.button.no']}" styleClass="botones apaisado destacado" style="margin-top: 0px;"
+               action="#{gicontroller.setServiceToRemove(null)}" reRender="removeServiceDialogPanel"/>
+        </h:panelGrid>
+      </rich:modalPanel>
+    </a4j:outputPanel>
+</ui:component>

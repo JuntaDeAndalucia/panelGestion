@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<ui:component xmlns="http://www.w3.org/1999/xhtml" xml:lang="es"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:rich="http://richfaces.org/rich"
+  xmlns:s="http://jboss.com/products/seam/taglib">
+
+  <h:form>
+    <div id="menu">
+      <div id="menu2">
+        <ui:repeat value="#{conversationStack}" var="entry">
+          <h:outputText value=" &#187; " />
+          <h:commandLink value="#{entry.description}" action="#{entry.select}" />
+        </ui:repeat>
+        <s:div style="float:right;">
+           <h:commandButton value="#{msg['login.button.logout']}" action="#{identity.logout}" styleClass="btn-logout"
+             title="#{msg['login.button.logout.title']}" />
+        </s:div>
+        <s:div styleClass="status">
+          <a4j:status styleClass="status">
+            <f:facet name="start">
+              <h:graphicImage value="/static/images/iconos/loading.gif" title="#{msg['status.loading']}"/>
+            </f:facet>
+            <f:facet name="stop">
+              <h:graphicImage value="/static/images/iconos/semaforo_verde.png" title="#{msg['status.completed']}" />
+            </f:facet>
+          </a4j:status>
+        </s:div>
+      </div>
+    </div>
+  </h:form>
+</ui:component>

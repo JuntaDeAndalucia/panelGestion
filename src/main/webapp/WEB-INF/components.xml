@@ -1,0 +1,93 @@
+<!--
+Empresa desarrolladora: Guadaltel
+
+Autor: Junta de Andalucía
+
+
+Derechos de explotación propiedad de la Junta de Andalucía.
+
+Éste programa es software libre: usted tiene derecho a redistribuirlo y/o modificarlo bajo los términos de la Licencia EUPL European Public License publicada por el organismo IDABC de la Comisión Europea, en su versión 1.0. o posteriores.
+
+Éste programa se distribuye de buena fe, pero SIN NINGUNA GARANTÍA, incluso sin las presuntas garantías implícitas de USABILIDAD o ADECUACIÓN A PROPÓSITO CONCRETO. Para mas información consulte la Licencia EUPL European Public License.
+
+Usted recibe una copia de la Licencia EUPL European Public License junto con este programa, si por algún motivo no le es posible visualizarla, puede consultarla en la siguiente URL: http://ec.europa.eu/idabc/servlets/Doc?id=31099
+
+You should have received a copy of the EUPL European Public License along with this program. If not, see http://ec.europa.eu/idabc/servlets/Doc?id=31096
+
+Vous devez avoir reçu une copie de la EUPL European Public License avec ce programme. Si non, voir http://ec.europa.eu/idabc/servlets/Doc?id=31205
+
+Sie sollten eine Kopie der EUPL European Public License zusammen mit diesem Programm. Wenn nicht, finden Sie da http://ec.europa.eu/idabc/servlets/Doc?id=29919
+-->
+<components xmlns="http://jboss.com/products/seam/components"
+            xmlns:core="http://jboss.com/products/seam/core"
+            xmlns:persistence="http://jboss.com/products/seam/persistence"
+            xmlns:transaction="http://jboss.com/products/seam/transaction"
+            xmlns:security="http://jboss.com/products/seam/security"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:theme="http://jboss.com/products/seam/theme"
+            xmlns:web="http://jboss.com/products/seam/web"
+            xmlns:mail="http://jboss.com/products/seam/mail"
+            xmlns:ui="http://jboss.com/products/seam/ui"
+            xsi:schemaLocation=
+            "http://jboss.com/products/seam/core http://jboss.com/products/seam/core-2.0.xsd
+            http://jboss.com/products/seam/web http://jboss.com/products/seam/web-2.0.xsd
+            http://jboss.com/products/seam/persistence http://jboss.com/products/seam/persistence-2.0.xsd
+            http://jboss.com/products/seam/transaction http://jboss.com/products/seam/transaction-2.0.xsd
+            http://jboss.com/products/seam/security http://jboss.com/products/seam/security-2.0.xsd
+            http://jboss.com/products/seam/components http://jboss.com/products/seam/components-2.0.xsd
+            http://jboss.com/products/seam/mail http://jboss.com/products/seam/mail-2.0.xsd
+            http://jboss.com/products/seam/theme http://jboss.com/products/seam/theme-2.0.xsd
+            http://jboss.com/products/seam/ui http://jboss.com/products/seam/ui-2.1.xsd" >
+
+  <!-- Desactivamos la creación de transacciones para todas las request -->
+	 <core:init transaction-management-enabled="false" debug="true"/>
+	
+  <!-- manager -->
+	 <core:manager conversation-timeout="120000" concurrent-request-timeout="1000" conversation-id-parameter="cid"/>
+	
+  <!-- Soporte de transacciones para el contexto. -->
+  <transaction:entity-transaction entity-manager="#{persistenceContextPanelGestion}" />
+  <persistence:managed-persistence-context name="persistenceContextPanelGestion" entity-manager-factory="#{persistenceFactory}" auto-create="true" />
+  <persistence:entity-manager-factory name="persistenceFactory"  persistence-unit-name="panelGestionDS"/>
+  
+  <!-- themes -->
+  <theme:theme-selector cookie-enabled="true">
+    <theme:available-themes>
+      <value>default</value>
+    </theme:available-themes>
+  </theme:theme-selector>
+
+   <ui:jpa-entity-loader entity-manager="#{persistenceContextPanelGestion}" />
+   
+   <!--  Configuración del filtro de excepciones solo para las páginas .jsf -->
+   <web:exception-filter url-pattern="*.jsf"/>
+   
+   <!-- Configuración para que la conversación se mantenga en las redirecciones-->
+   <web:redirect-filter url-pattern="*.jsf"/>
+   
+   <!-- security -->
+   <security:identity authenticate-method="#{authenticator.authenticate}"/>
+   <core:resource-loader bundle-names="security" />
+   
+   <event type="org.jboss.seam.security.notLoggedIn">
+     <action execute="#{redirect.setViewId('/pages/index.xhtml')}"/>
+   </event>
+
+   <event type="org.jboss.seam.security.postAuthenticate">
+     <action execute="#{redirect.setViewId('/pages/index.xhtml')}"/>
+     <action execute="#{redirect.execute()}"/>
+   </event>
+    
+    <!-- ========================================= -->
+    <!--                CONVERTERS                 -->
+    <!-- ========================================= -->
+    <component name="dataBaseConverter">
+       <property name="dataBaseService">#{dataBaseService}</property>
+    </component>
+    <component name="schemaConverter">
+       <property name="schemaService">#{schemaService}</property>
+    </component>
+    <component name="tableConverter">
+       <property name="tableService">#{tableService}</property>
+    </component>
+</components>

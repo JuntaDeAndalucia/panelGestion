@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:s="http://jboss.com/products/seam/taglib">
+
+<head>
+    <!-- META INFORMATION -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="content-language" content="es" />
+    <meta http-equiv="Content-Script-Type" content="Javascript" />
+    <meta name="description" content="Panel de Gesti&#243;n para el SIGC" />
+    
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.requestContextPath}/static/css/estilo.css" />
+    
+    <!-- JAVASCRIPT -->
+    <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/static/js/panel-1.0.0.js"></script>
+    
+    <!-- TITLE -->
+    <title>
+       <ui:insert name="titulo">
+           <h:outputText value="#{msg['app.title']}" />
+       </ui:insert>
+    </title>
+</head>
+<body>
+  <div id="content">
+    <div id="content2">
+
+      <!-- CABECERA -->
+      <ui:include src="head.xhtml" />
+      <s:div rendered="#{initPage == null}">
+
+        <!-- MIGAS DE PAN -->
+        <ui:include src="breadcrumbs.xhtml" />
+        <!-- WORKSPACE -->
+        <ui:insert name="workspace" />
+        <!-- PANEL LATERAL -->
+        <ui:include src="leftpanel.xhtml" />
+      </s:div>
+
+      <!-- CONTENIDO -->
+      <s:div id="contenido">
+        <ui:insert name="content" />
+      </s:div>
+      <div class="fila_fin_contenido"></div>
+
+      <!-- PIE DE PAGINA -->
+      <ui:include src="footer.xhtml" />
+    </div>
+  </div>
+</body>
+</html>

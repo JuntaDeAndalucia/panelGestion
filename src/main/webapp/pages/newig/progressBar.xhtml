@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<ui:component xmlns="http://www.w3.org/1999/xhtml" xml:lang="es"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:rich="http://richfaces.org/rich"
+  xmlns:s="http://jboss.com/products/seam/taglib">
+
+  <h:panelGrid columns="1" width="100%">
+    <a4j:poll id="taskPoll" interval="#{newgicontroller.updatingInterval}" limitToList="true"
+      enabled="#{(newgicontroller.taskvo.taskEntity.state.status != null) and (newgicontroller.taskvo.taskEntity.state.status != 'ERROR') and (newgicontroller.taskvo.taskEntity.state.status != 'FINISHED')}"
+      reRender="progressBarPanel,loadButtonPanel,genericErrorMessage" action="#{newgicontroller.checkCurrentTask()}"/>
+    <a4j:outputPanel id="taskprogress">
+      <s:div styleClass="alignCenter">
+        <div class="progress" style="float: right;">
+          <div
+            class="progress-bar #{(newgicontroller.taskvo.taskEntity.state.status == 'ERROR')?'progress-bar-danger':((newgicontroller.taskvo.taskEntity.state.status == 'FINISHED')?'progress-bar-success':'')}"
+            role="progressbar"
+            aria-valuenow="#{newgicontroller.taskvo.taskEntity.state.progress}"
+            aria-valuemin="0" aria-valuemax="100"
+            style="width: #{newgicontroller.taskvo.taskEntity.state.progress}%">
+            <h:outputText
+              value="#{newgicontroller.taskvo.taskEntity.state.progress}% Completo"
+              styleClass="sr-only" />
+          </div>
+        </div>
+      </s:div>
+      <h:graphicImage value="/static/images/iconos/tick_.png" rendered="#{newgicontroller.taskvo.taskEntity.state.status == 'FINISHED'}" />
+      <h:graphicImage value="/static/images/iconos/cross.png" rendered="#{newgicontroller.taskvo.taskEntity.state.status == 'ERROR'}" />
+      <h:outputText
+        value="#{newgicontroller.taskvo.taskEntity.state.description}"
+        styleClass="#{(newgicontroller.taskvo.taskEntity.state.status == 'ERROR')?'error':'success'}"
+        rendered="#{(newgicontroller.taskvo.taskEntity.state.status == 'ERROR') or (newgicontroller.taskvo.taskEntity.state.status == 'FINISHED')}" />
+    </a4j:outputPanel>
+  </h:panelGrid>
+</ui:component>
